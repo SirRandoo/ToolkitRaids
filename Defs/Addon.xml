@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Defs>
+    <ToolkitCore.Models.ToolkitAddon>
+        <defName>ToolkitRaids</defName>
+        <label>ToolkitRaids</label>
+        <menuClass>SirRandoo.ToolkitRaids.AddonMenu</menuClass>
+    </ToolkitCore.Models.ToolkitAddon>
+</Defs>

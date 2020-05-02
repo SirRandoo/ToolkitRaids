@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Defs>
+    <ToolkitCore.Models.ToolkitChatCommand>
+        <defName>JoinRaid</defName>
+        <commandText>joinraid</commandText>
+        <enabled>true</enabled>
+        <commandClass>SirRandoo.ToolkitRaids.CommandMethods.JoinRaidCommand</commandClass>
+        <requiresMod>false</requiresMod>
+        <requiresBroadcaster>false</requiresBroadcaster>
+    </ToolkitCore.Models.ToolkitChatCommand>
+</Defs>
