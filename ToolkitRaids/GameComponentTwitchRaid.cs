@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using RimWorld;
@@ -84,6 +84,14 @@ namespace SirRandoo.ToolkitRaids
 
         public bool TryJoinRaid(Viewer viewer)
         {
+            foreach (var r in _raids)
+            {
+                if (r.Army.Any(s => s.Username.Equals(viewer.Username)))
+                {
+                    return false;
+                }
+            }
+            
             if (!_raids.TryRandomElement(out var raid))
             {
                 return false;
