@@ -95,7 +95,7 @@ namespace SirRandoo.ToolkitRaids
 
         public override void ExposeData()
         {
-            Scribe_Values.Look(ref _raids, "pendingRaids");
+            Scribe_Collections.Look(ref _raids, "pendingRaids", LookMode.Value);
         }
     }
 }
