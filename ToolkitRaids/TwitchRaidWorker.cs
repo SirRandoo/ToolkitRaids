@@ -19,7 +19,7 @@ namespace SirRandoo.ToolkitRaids
             if (leader != null)
             {
                 var name = leader.Name as NameTriple;
-                leader.Name = new NameTriple(name?.First, RaidData.Leader.Username, name?.Last);
+                leader.Name = new NameTriple(name?.First, RaidData.Leader, name?.Last);
             }
 
             var limit = Mathf.Min(pawns.Count, RaidData.Army.Count);
@@ -33,7 +33,7 @@ namespace SirRandoo.ToolkitRaids
                     continue;
                 }
 
-                Viewer viewer;
+                string viewer;
 
                 try
                 {
@@ -45,7 +45,7 @@ namespace SirRandoo.ToolkitRaids
                 }
 
                 var pName = pawn.Name as NameTriple;
-                pawn.Name = new NameTriple(pName?.First, viewer.Username, pName?.Last);
+                pawn.Name = new NameTriple(pName?.First, viewer, pName?.Last);
             }
 
             return base.GetLetterText(parms, pawns);

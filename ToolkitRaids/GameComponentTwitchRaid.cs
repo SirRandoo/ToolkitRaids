@@ -11,14 +11,14 @@ namespace SirRandoo.ToolkitRaids
 {
     public class Raid
     {
-        public Raid(Viewer leader)
+        public Raid(string leader)
         {
             Leader = leader;
         }
 
         public float Timer { get; set; }
-        public Viewer Leader { get; }
-        public List<Viewer> Army { get; } = new List<Viewer>();
+        public string Leader { get; }
+        public List<string> Army { get; } = new List<string>();
     }
 
     public class GameComponentTwitchRaid : GameComponent
@@ -44,37 +44,28 @@ namespace SirRandoo.ToolkitRaids
                     continue;
                 }
 
-                var viewer = !ViewerController.ViewerExists(result)
-                    ? ViewerController.CreateViewer(result)
-                    : ViewerController.GetViewer(result);
-
-                if (viewer == null)
-                {
-                    continue;
-                }
-
                 if (Settings.MergeRaids)
                 {
                     var existing = _raids.FirstOrDefault();
 
                     if (existing == null)
                     {
-                        _raids.Add(new Raid(viewer));
+                        _raids.Add(new Raid(result));
                     }
                     else
                     {
-                        existing.Army.Add(viewer);
+                        existing.Army.Add(result);
                     }
                 }
                 else
                 {
-                    if (_raids.Any(l => l.Leader.Username.Equals(viewer.Username)))
+                    if (_raids.Any(l => l.Leader.Equals(result)))
                     {
                         Log.Message("ToolkitRaids :: Received a duplicate raid.");
                         continue;
                     }
 
-                    _raids.Add(new Raid(viewer));
+                    _raids.Add(new Raid(result));
                 }
             }
 
@@ -133,7 +124,7 @@ namespace SirRandoo.ToolkitRaids
         {
             foreach (var r in _raids)
             {
-                if (r.Army.Any(s => s.Username.Equals(viewer.Username)))
+                if (r.Army.Any(s => s.Equals(viewer.Username)))
                 {
                     return false;
                 }
@@ -144,7 +135,7 @@ namespace SirRandoo.ToolkitRaids
                 return false;
             }
 
-            raid.Army.Add(viewer);
+            raid.Army.Add(viewer.Username);
             return true;
         }
 
