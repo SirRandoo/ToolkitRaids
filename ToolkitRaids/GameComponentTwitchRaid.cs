@@ -50,7 +50,7 @@ namespace SirRandoo.ToolkitRaids
 
                     if (existing == null)
                     {
-                        _raids.Add(new Raid(result));
+                        _raids.Add(new Raid(result) { Timer = Settings.Duration });
                     }
                     else
                     {
@@ -65,7 +65,7 @@ namespace SirRandoo.ToolkitRaids
                         continue;
                     }
 
-                    _raids.Add(new Raid(result));
+                    _raids.Add(new Raid(result) { Timer = Settings.Duration });
                 }
             }
 
