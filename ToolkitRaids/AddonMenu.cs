@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ToolkitCore.Interfaces;
 using ToolkitCore.Windows;
+using UnityEngine;
 using Verse;
 
 namespace SirRandoo.ToolkitRaids
@@ -19,7 +20,20 @@ namespace SirRandoo.ToolkitRaids
                         Find.WindowStack.TryRemove(window.GetType());
                         Find.WindowStack.Add(window);
                     }
-                )
+                ),
+                new FloatMenuOption("ToolkitRaids.AddonMenu.ForceNoRegister".Translate(),
+                    () =>
+                    {
+                        if (!UnityData.IsInMainThread)
+                        {
+                            return;
+                        }
+
+                        Log.Message("ToolkitRaids :: Forcibly closing registration for all pending raids...");
+                        var component = Current.Game?.GetComponent<GameComponentTwitchRaid>();
+                        
+                        component?.ForceCloseRegistry();
+                    })
             };
         }
     }
