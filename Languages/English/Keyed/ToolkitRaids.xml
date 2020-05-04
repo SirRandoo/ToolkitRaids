@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <LanguageData>
     <!-- Addon Menu -->
@@ -7,4 +7,6 @@
     <!-- Settings -->
     <ToolkitRaids.MergeRaids.Label>Merge Twitch raids into one.</ToolkitRaids.MergeRaids.Label>
     <ToolkitRaids.MergeRaids.Tooltip>When enabled, the mod will merge separate raids into one massive raid.</ToolkitRaids.MergeRaids.Tooltip>
+    <ToolkitRaids.Duration.Label>How long do viewers have, in seconds, to join the raid.</ToolkitRaids.Duration.Label>
+    <ToolkitRaids.Duration.Tooltip>The amount of time, in seconds, viewers will have to join the raid event by typing !joinraid in chat.</ToolkitRaids.Duration.Tooltip>
 </LanguageData>
