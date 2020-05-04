@@ -4,6 +4,7 @@
     <!-- Addon Menu -->
     <ToolkitRaids.AddonMenu.Settings>Settings</ToolkitRaids.AddonMenu.Settings>
     <ToolkitRaids.AddonMenu.ForceNoRegister>Close raid signup</ToolkitRaids.AddonMenu.ForceNoRegister>
+    <ToolkitRaids.AddonMenu.ForceNewRaid>Generate new raid</ToolkitRaids.AddonMenu.ForceNewRaid>
     
     <!-- Settings -->
     <ToolkitRaids.MergeRaids.Label>Merge Twitch raids into one.</ToolkitRaids.MergeRaids.Label>

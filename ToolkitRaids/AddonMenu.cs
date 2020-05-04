@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using ToolkitCore.Interfaces;
 using ToolkitCore.Windows;
 using Verse;
@@ -34,6 +35,26 @@ namespace SirRandoo.ToolkitRaids
                         var component = Current.Game?.GetComponent<GameComponentTwitchRaid>();
 
                         component?.ForceCloseRegistry();
+                    }
+                ),
+                new FloatMenuOption(
+                    "ToolkitRaids.AddonMenu.ForceNewRaid".Translate(),
+                    () =>
+                    {
+                        if (!UnityData.IsInMainThread)
+                        {
+                            return;
+                        }
+
+                        Log.Message("ToolkitRaids :: Forcibly starting a new raid...");
+
+                        var result = Path.GetRandomFileName()
+                            .Replace(".", "")
+                            .Substring(0, 8);
+                        
+                        ToolkitRaids.RecentRaids.Enqueue(result);
+                        
+                        Log.Message($@"ToolkitRaids :: Scheduled a new raid with leader ""{result}"".");
                     }
                 )
             };
