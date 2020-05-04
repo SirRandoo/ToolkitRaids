@@ -24,6 +24,11 @@ namespace SirRandoo.ToolkitRaids
     {
         private List<Raid> _raids = new List<Raid>();
 
+        public GameComponentTwitchRaid(Game game)
+        {
+            
+        }
+
         public override void GameComponentTick()
         {
             for (var index = _raids.Count - 1; index >= 0; index--)
