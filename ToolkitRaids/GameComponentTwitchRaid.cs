@@ -1,7 +1,9 @@
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Linq;
 using RimWorld;
+using ToolkitCore.Controllers;
 using ToolkitCore.Models;
 using UnityEngine;
 using Verse;
@@ -31,6 +33,53 @@ namespace SirRandoo.ToolkitRaids
 
         public override void GameComponentTick()
         {
+            while (!ToolkitRaids.RecentRaids.IsEmpty)
+            {
+                if (!ToolkitRaids.RecentRaids.TryDequeue(out var result))
+                {
+                    break;
+                }
+
+                if (result.NullOrEmpty())
+                {
+                    Log.Message("ToolkitRaids :: Received an invalid raider.");
+                    continue;
+                }
+
+                var viewer = !ViewerController.ViewerExists(result)
+                    ? ViewerController.CreateViewer(result)
+                    : ViewerController.GetViewer(result);
+
+                if (viewer == null)
+                {
+                    continue;
+                }
+
+                if (Settings.MergeRaids)
+                {
+                    var existing = _raids.FirstOrDefault();
+
+                    if (existing == null)
+                    {
+                        _raids.Add(new Raid(viewer));
+                    }
+                    else
+                    {
+                        existing.Army.Add(viewer);
+                    }
+                }
+                else
+                {
+                    if (_raids.Any(l => l.Leader.Username.Equals(viewer.Username)))
+                    {
+                        Log.Message("ToolkitRaids :: Received a duplicate raid.");
+                        continue;
+                    }
+
+                    _raids.Add(new Raid(viewer));
+                }
+            }
+
             for (var index = _raids.Count - 1; index >= 0; index--)
             {
                 var raid = _raids[index];
