@@ -11,7 +11,7 @@ namespace SirRandoo.ToolkitRaids
     public class TwitchRaidWorker : IncidentWorker_RaidEnemy
     {
         public Raid RaidData { get; set; }
-        
+
         protected override string GetLetterText(IncidentParms parms, List<Pawn> pawns)
         {
             var leader = pawns.FirstOrDefault(p => p.Faction.leader == p);
@@ -27,19 +27,19 @@ namespace SirRandoo.ToolkitRaids
             for (var index = 0; index < limit; index++)
             {
                 var pawn = pawns[index];
-                
+
                 if (pawn == leader)
                 {
                     continue;
                 }
-                
+
                 Viewer viewer;
 
                 try
                 {
                     viewer = RaidData.Army[index];
                 }
-                catch(IndexOutOfRangeException)
+                catch (IndexOutOfRangeException)
                 {
                     break;
                 }

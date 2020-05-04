@@ -1,5 +1,4 @@
-using System;
-using System.CodeDom;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
@@ -28,7 +27,6 @@ namespace SirRandoo.ToolkitRaids
 
         public GameComponentTwitchRaid(Game game)
         {
-            
         }
 
         public override void GameComponentTick()
@@ -140,7 +138,7 @@ namespace SirRandoo.ToolkitRaids
                     return false;
                 }
             }
-            
+
             if (!_raids.TryRandomElement(out var raid))
             {
                 return false;

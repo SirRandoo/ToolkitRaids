@@ -11,10 +11,10 @@ namespace SirRandoo.ToolkitRaids
 
         public static void Draw(Rect canvas)
         {
-            var listing = new Listing_Standard{maxOneColumn = true};
+            var listing = new Listing_Standard {maxOneColumn = true};
 
             listing.Begin(canvas);
-            
+
             listing.CheckboxLabeled(
                 "ToolkitRaids.MergeRaids.Label".Translate(),
                 ref MergeRaids,
@@ -23,7 +23,7 @@ namespace SirRandoo.ToolkitRaids
 
             var (timeLabel, timeField) = ToForm(listing.GetRect(Text.LineHeight));
             var durationBuffer = Duration.ToString();
-            
+
             Widgets.Label(timeLabel, "ToolkitRaids.Duration.Label".Translate());
             Widgets.TextFieldNumeric(timeField, ref Duration, ref durationBuffer, 30, 600);
 
@@ -32,7 +32,7 @@ namespace SirRandoo.ToolkitRaids
                 Widgets.DrawHighlightIfMouseover(timeLabel);
                 TooltipHandler.TipRegion(timeLabel, "ToolkitRaids.Duration.Tooltip".Translate());
             }
-            
+
             listing.End();
         }
 
