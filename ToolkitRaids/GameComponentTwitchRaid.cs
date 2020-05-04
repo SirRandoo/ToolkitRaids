@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using RimWorld;
 using ToolkitCore.Models;
@@ -69,6 +70,22 @@ namespace SirRandoo.ToolkitRaids
             {
                 raid.Timer = -10f;
             }
+        }
+
+        public bool CanJoinRaid()
+        {
+            return _raids.Any(r => r.Timer > 0f);
+        }
+
+        public bool TryJoinRaid(Viewer viewer)
+        {
+            if (!_raids.TryRandomElement(out var raid))
+            {
+                return false;
+            }
+
+            raid.Army.Add(viewer);
+            return true;
         }
 
         public override void ExposeData()
