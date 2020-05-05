@@ -1,8 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
-using ToolkitCore.Controllers;
 using ToolkitCore.Models;
 using UnityEngine;
 using Verse;
@@ -57,7 +56,7 @@ namespace SirRandoo.ToolkitRaids
 
                     if (existing == null)
                     {
-                        _raids.Add(new Raid(result) { Timer = Settings.Duration });
+                        _raids.Add(new Raid(result) {Timer = Settings.Duration});
                     }
                     else
                     {
@@ -72,7 +71,7 @@ namespace SirRandoo.ToolkitRaids
                         continue;
                     }
 
-                    _raids.Add(new Raid(result) { Timer = Settings.Duration });
+                    _raids.Add(new Raid(result) {Timer = Settings.Duration});
                 }
             }
 
@@ -86,7 +85,7 @@ namespace SirRandoo.ToolkitRaids
                 {
                     continue;
                 }
-                
+
                 var map = Current.Game.Maps.Where(m => m.IsPlayerHome).RandomElementWithFallback();
 
                 if (map == null)

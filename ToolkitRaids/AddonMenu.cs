@@ -51,9 +51,9 @@ namespace SirRandoo.ToolkitRaids
                         var result = Path.GetRandomFileName()
                             .Replace(".", "")
                             .Substring(0, 8);
-                        
+
                         ToolkitRaids.RecentRaids.Enqueue(result);
-                        
+
                         Log.Message($@"ToolkitRaids :: Scheduled a new raid with leader ""{result}"".");
                     }
                 )
