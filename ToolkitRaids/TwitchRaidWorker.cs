@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
-using ToolkitCore.Models;
 using UnityEngine;
 using Verse;
 
@@ -15,14 +14,19 @@ namespace SirRandoo.ToolkitRaids
         protected override string GetLetterText(IncidentParms parms, List<Pawn> pawns)
         {
             var leader = pawns.FirstOrDefault(p => p.Faction.leader == p);
+            var army = RaidData.Army.ToList();
 
             if (leader != null)
             {
                 var name = leader.Name as NameTriple;
                 leader.Name = new NameTriple(name?.First, RaidData.Leader, name?.Last);
             }
+            else
+            {
+                army.Add(RaidData.Leader);
+            }
 
-            var limit = Mathf.Min(pawns.Count, RaidData.Army.Count);
+            var limit = Mathf.Min(pawns.Count, army.Count);
 
             for (var index = 0; index < limit; index++)
             {
@@ -37,7 +41,7 @@ namespace SirRandoo.ToolkitRaids
 
                 try
                 {
-                    viewer = RaidData.Army[index];
+                    viewer = army[index];
                 }
                 catch (IndexOutOfRangeException)
                 {
