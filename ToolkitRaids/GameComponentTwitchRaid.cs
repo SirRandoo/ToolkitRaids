@@ -86,20 +86,23 @@ namespace SirRandoo.ToolkitRaids
                 {
                     continue;
                 }
+                
+                var map = Current.Game.Maps.Where(m => m.IsPlayerHome).RandomElementWithFallback();
 
-                var parms = new IncidentParms
+                if (map == null)
                 {
-                    forced = true,
-                    generateFightersOnly = true,
-                    pawnCount = raid.Army.Count + 1,
-                    raidArrivalMode = PawnsArrivalModeDefOf.EdgeWalkIn
-                };
+                    continue;
+                }
+
+                var defaultParms = StorytellerUtility.DefaultParmsNow(IncidentCategoryDefOf.ThreatBig, map);
+                defaultParms.forced = true;
+                defaultParms.points = 36f * (raid.Army.Count + 1);
 
                 var worker = new TwitchRaidWorker {RaidData = raid, def = IncidentDefOf.RaidEnemy};
 
                 try
                 {
-                    worker.TryExecute(parms);
+                    worker.TryExecute(defaultParms);
                 }
                 catch (Exception e)
                 {
