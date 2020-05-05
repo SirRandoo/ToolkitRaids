@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
@@ -9,16 +9,23 @@ using Verse;
 
 namespace SirRandoo.ToolkitRaids
 {
-    public class Raid
+    public class Raid : IExposable
     {
+        public List<string> Army = new List<string>();
+        public string Leader;
+        public float Timer;
+
         public Raid(string leader)
         {
             Leader = leader;
         }
 
-        public float Timer { get; set; }
-        public string Leader { get; }
-        public List<string> Army { get; } = new List<string>();
+        public void ExposeData()
+        {
+            Scribe_Deep.Look(ref Timer, "timer");
+            Scribe_Deep.Look(ref Leader, "leader");
+            Scribe_Collections.Look(ref Army, "army", LookMode.Value);
+        }
     }
 
     public class GameComponentTwitchRaid : GameComponent
