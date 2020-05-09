@@ -11,4 +11,10 @@
     <ToolkitRaids.MergeRaids.Tooltip>When enabled, the mod will merge separate raids into one massive raid.</ToolkitRaids.MergeRaids.Tooltip>
     <ToolkitRaids.Duration.Label>How long do viewers have, in seconds, to join the raid.</ToolkitRaids.Duration.Label>
     <ToolkitRaids.Duration.Tooltip>The amount of time, in seconds, viewers will have to join the raid event by typing !joinraid in chat.</ToolkitRaids.Duration.Tooltip>
+    
+    <!-- Window -->
+    <ToolkitRaids.Windows.Raid.Title>An army has amased </ToolkitRaids.Windows.Raid.Title>
+    <ToolkitRaids.Windows.Raid.Footer>Type !joinraid to join the raid.</ToolkitRaids.Windows.Raid.Footer>
+    <ToolkitRaids.Windows.Raid.Leader>Raid leader</ToolkitRaids.Windows.Raid.Leader>
+    <ToolkitRaids.Windows.Raid.Troops>Troops</ToolkitRaids.Windows.Raid.Troops>
 </LanguageData>
