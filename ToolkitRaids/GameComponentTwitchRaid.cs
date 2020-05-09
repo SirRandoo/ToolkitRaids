@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
@@ -29,6 +29,7 @@ namespace SirRandoo.ToolkitRaids
 
     public class GameComponentTwitchRaid : GameComponent
     {
+        private int _marker;
         private List<Raid> _raids = new List<Raid>();
 
         public GameComponentTwitchRaid(Game game)
@@ -75,11 +76,23 @@ namespace SirRandoo.ToolkitRaids
                 }
             }
 
+            if (_raids.Any() && !Find.WindowStack.IsOpen(typeof(RaidDialog)))
+            {
+                Find.WindowStack.Add(new RaidDialog());
+            }
+
+            if (Mathf.FloorToInt(Time.unscaledTime) <= _marker)
+            {
+                return;
+            }
+
+            _marker = Mathf.FloorToInt(Time.unscaledTime);
+
             for (var index = _raids.Count - 1; index >= 0; index--)
             {
                 var raid = _raids[index];
 
-                raid.Timer -= Time.deltaTime;
+                raid.Timer -= 1;
 
                 if (raid.Timer > 0f)
                 {
