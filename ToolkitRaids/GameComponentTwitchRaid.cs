@@ -31,11 +31,12 @@ namespace SirRandoo.ToolkitRaids
     {
         private int _marker;
         private List<Raid> _raids = new List<Raid>();
-        public List<Raid> AllRaidsForReading => _raids.ToList();
 
         public GameComponentTwitchRaid(Game game)
         {
         }
+
+        public List<Raid> AllRaidsForReading => _raids.ToList();
 
         public override void GameComponentTick()
         {
