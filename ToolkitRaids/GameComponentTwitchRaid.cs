@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
@@ -145,12 +145,9 @@ namespace SirRandoo.ToolkitRaids
 
         public bool TryJoinRaid(Viewer viewer)
         {
-            foreach (var r in _raids)
+            if (Enumerable.Any(_raids, r => r.Army.Any(s => s.Equals(viewer.Username))))
             {
-                if (r.Army.Any(s => s.Equals(viewer.Username)))
-                {
-                    return false;
-                }
+                return false;
             }
 
             if (!_raids.TryRandomElement(out var raid))
