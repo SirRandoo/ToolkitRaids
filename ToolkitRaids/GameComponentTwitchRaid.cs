@@ -29,11 +29,14 @@ namespace SirRandoo.ToolkitRaids
 
     public class GameComponentTwitchRaid : GameComponent
     {
+        private int _marker;
         private List<Raid> _raids = new List<Raid>();
 
         public GameComponentTwitchRaid(Game game)
         {
         }
+
+        public List<Raid> AllRaidsForReading => _raids.ToList();
 
         public override void GameComponentTick()
         {
@@ -75,11 +78,23 @@ namespace SirRandoo.ToolkitRaids
                 }
             }
 
+            if (_raids.Any() && !Find.WindowStack.IsOpen(typeof(RaidDialog)))
+            {
+                Find.WindowStack.Add(new RaidDialog());
+            }
+
+            if (Mathf.FloorToInt(Time.unscaledTime) <= _marker)
+            {
+                return;
+            }
+
+            _marker = Mathf.FloorToInt(Time.unscaledTime);
+
             for (var index = _raids.Count - 1; index >= 0; index--)
             {
                 var raid = _raids[index];
 
-                raid.Timer -= Time.deltaTime;
+                raid.Timer -= 1;
 
                 if (raid.Timer > 0f)
                 {
@@ -129,14 +144,16 @@ namespace SirRandoo.ToolkitRaids
             return _raids.Any(r => r.Timer > 0f);
         }
 
+        public void RegisterRaid(Raid raid)
+        {
+            _raids.Add(raid);
+        }
+
         public bool TryJoinRaid(Viewer viewer)
         {
-            foreach (var r in _raids)
+            if (Enumerable.Any(_raids, r => r.Army.Any(s => s.Equals(viewer.Username))))
             {
-                if (r.Army.Any(s => s.Equals(viewer.Username)))
-                {
-                    return false;
-                }
+                return false;
             }
 
             if (!_raids.TryRandomElement(out var raid))
