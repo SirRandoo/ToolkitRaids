@@ -56,6 +56,41 @@ namespace SirRandoo.ToolkitRaids
 
                         Log.Message($@"ToolkitRaids :: Scheduled a new raid with leader ""{result}"".");
                     }
+                ),
+                new FloatMenuOption(
+                    "ToolkitRaids.AddonMenu.ForceNewRaidLarge".Translate(),
+                    () =>
+                    {
+                        if (!UnityData.IsInMainThread)
+                        {
+                            return;
+                        }
+
+                        Log.Message("ToolkitRaids :: Forcible starting a new large raid...");
+
+                        var component = Current.Game.GetComponent<GameComponentTwitchRaid>();
+
+                        if (component == null)
+                        {
+                            return;
+                        }
+
+                        var leader = Path.GetRandomFileName()
+                            .Replace(".", "")
+                            .Substring(0, 8);
+                        var raid = new Raid(leader);
+
+                        for (var index = 0; index < 20; index++)
+                        {
+                            raid.Army.Add(
+                                Path.GetRandomFileName()
+                                    .Replace(".", "")
+                                    .Substring(0, 8)
+                            );
+                        }
+
+                        component.RegisterRaid(raid);
+                    }
                 )
             };
         }

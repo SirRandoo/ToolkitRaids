@@ -144,6 +144,11 @@ namespace SirRandoo.ToolkitRaids
             return _raids.Any(r => r.Timer > 0f);
         }
 
+        public void RegisterRaid(Raid raid)
+        {
+            _raids.Add(raid);
+        }
+
         public bool TryJoinRaid(Viewer viewer)
         {
             if (Enumerable.Any(_raids, r => r.Army.Any(s => s.Equals(viewer.Username))))
