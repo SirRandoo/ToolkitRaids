@@ -47,6 +47,8 @@ namespace SirRandoo.ToolkitRaids
             closeOnAccept = false;
             focusWhenOpened = false;
             closeOnClickedOutside = false;
+            absorbInputAroundWindow = false;
+            preventCameraMotion = false;
         }
 
         public override Vector2 InitialSize => new Vector2(300, 300);
