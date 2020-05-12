@@ -41,6 +41,7 @@
         <Compile Include="AddonMenu.cs" />
         <Compile Include="CommandMethods\JoinRaidCommand.cs" />
         <Compile Include="GameComponentTwitchRaid.cs" />
+        <Compile Include="RaidDialog.cs" />
         <Compile Include="Settings.cs" />
         <Compile Include="ToolkitRaids.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
@@ -70,7 +71,7 @@
         </Content>
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="HodlHodl.Rimworld.Toolkit.Core" Version="1.1.5" IncludeAssets="runtime" />
+      <PackageReference Include="HodlHodl.Rimworld.Toolkit.Core" Version="1.1.5" ExcludeAssets="runtime" />
       <PackageReference Include="Krafs.Rimworld.Ref" Version="1.1.2618" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

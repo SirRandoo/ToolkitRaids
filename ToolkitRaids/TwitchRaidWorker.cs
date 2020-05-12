@@ -23,7 +23,7 @@ namespace SirRandoo.ToolkitRaids
             }
             else
             {
-                army.Add(RaidData.Leader);
+                army.Insert(0, RaidData.Leader);
             }
 
             var limit = Mathf.Min(pawns.Count, army.Count);
