@@ -1,4 +1,4 @@
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using ToolkitCore;
 using TwitchLib.Client.Events;
 using UnityEngine;
@@ -8,7 +8,7 @@ namespace SirRandoo.ToolkitRaids
 {
     public class ToolkitRaids : Mod
     {
-        public static ConcurrentQueue<string> RecentRaids = new ConcurrentQueue<string>();
+        public static readonly ConcurrentQueue<string> RecentRaids = new ConcurrentQueue<string>();
 
         public ToolkitRaids(ModContentPack content) : base(content)
         {
