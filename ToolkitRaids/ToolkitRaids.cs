@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using ToolkitCore;
 using TwitchLib.Client.Events;
 using UnityEngine;
@@ -26,6 +26,7 @@ namespace SirRandoo.ToolkitRaids
         }
     }
 
+    [StaticConstructorOnStartup]
     public static class ToolkitRaidsStatic
     {
         static ToolkitRaidsStatic()
