@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Verse;
 
 namespace SirRandoo.ToolkitRaids
@@ -10,11 +10,11 @@ namespace SirRandoo.ToolkitRaids
 
         private GameComponentTwitchRaid _component;
         private Vector2 _scrollPos = Vector2.zero;
-        private TaggedString footerText;
-        private TaggedString leaderText;
+        private TaggedString _footerText;
+        private TaggedString _leaderText;
 
-        private TaggedString titleText;
-        private TaggedString troopText;
+        private TaggedString _titleText;
+        private TaggedString _troopText;
 
         static RaidDialog()
         {
@@ -39,7 +39,7 @@ namespace SirRandoo.ToolkitRaids
         {
             GetTranslations();
 
-            optionalTitle = titleText;
+            optionalTitle = _titleText;
 
             doCloseX = true;
             draggable = true;
@@ -55,10 +55,10 @@ namespace SirRandoo.ToolkitRaids
 
         private void GetTranslations()
         {
-            titleText = "ToolkitRaids.Windows.Raid.Title".Translate();
-            troopText = "ToolkitRaids.Windows.Raid.Troops".Translate();
-            leaderText = "ToolkitRaids.Windows.Raid.Leader".Translate();
-            footerText = "ToolkitRaids.Windows.Raid.Footer".Translate();
+            _titleText = "ToolkitRaids.Windows.Raid.Title".Translate();
+            _troopText = "ToolkitRaids.Windows.Raid.Troops".Translate();
+            _leaderText = "ToolkitRaids.Windows.Raid.Leader".Translate();
+            _footerText = "ToolkitRaids.Windows.Raid.Footer".Translate();
         }
 
         public override void PreOpen()
@@ -106,8 +106,8 @@ namespace SirRandoo.ToolkitRaids
                     Widgets.DrawLightHighlight(line);
                 }
 
-                Widgets.Label(leaderRect, $"{leaderText.RawText}: {raid.Leader}");
-                Widgets.Label(armyRect, $"{troopText.RawText}: {raid.Army.Count:N0}");
+                Widgets.Label(leaderRect, $"{_leaderText.RawText}: {raid.Leader}");
+                Widgets.Label(armyRect, $"{_troopText.RawText}: {raid.Army.Count:N0}");
 
 
                 GUI.color = TimerGradient.Evaluate(1f - progress);
@@ -121,7 +121,7 @@ namespace SirRandoo.ToolkitRaids
             var footerRect = new Rect(0f, inRect.height - Text.LineHeight, inRect.width, Text.LineHeight);
 
             GUI.BeginGroup(footerRect);
-            Widgets.Label(new Rect(0f, 0f, inRect.width, Text.LineHeight), footerText);
+            Widgets.Label(new Rect(0f, 0f, inRect.width, Text.LineHeight), _footerText);
             GUI.EndGroup();
 
             GUI.EndGroup();
