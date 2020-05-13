@@ -49,7 +49,7 @@ namespace SirRandoo.ToolkitRaids
 
                 if (result.NullOrEmpty())
                 {
-                    Log.Message("ToolkitRaids :: Received an invalid raider.");
+                    RaidLogger.Warn("Received an invalid raider.");
                     continue;
                 }
 
@@ -70,7 +70,7 @@ namespace SirRandoo.ToolkitRaids
                 {
                     if (_raids.Any(l => l.Leader.Equals(result)))
                     {
-                        Log.Message("ToolkitRaids :: Received a duplicate raid.");
+                        RaidLogger.Warn("Received a duplicate raid.");
                         continue;
                     }
 
@@ -120,9 +120,7 @@ namespace SirRandoo.ToolkitRaids
                 }
                 catch (Exception e)
                 {
-                    Log.Error(
-                        $"ToolkitRaids :: Could not execute raid worker.\n{e.GetType().Name}({e.Message})\n{e.StackTrace}"
-                    );
+                    RaidLogger.Error("Could not execute raid worker", e);
                 }
                 finally
                 {

@@ -31,7 +31,7 @@ namespace SirRandoo.ToolkitRaids
                             return;
                         }
 
-                        Log.Message("ToolkitRaids :: Forcibly closing registration for all pending raids...");
+                        RaidLogger.Warn("Forcibly closing registration for all pending raids...");
                         var component = Current.Game?.GetComponent<GameComponentTwitchRaid>();
 
                         component?.ForceCloseRegistry();
@@ -46,7 +46,7 @@ namespace SirRandoo.ToolkitRaids
                             return;
                         }
 
-                        Log.Message("ToolkitRaids :: Forcibly starting a new raid...");
+                        RaidLogger.Info("Forcibly starting a new raid...");
 
                         var result = Path.GetRandomFileName()
                             .Replace(".", "")
@@ -54,7 +54,7 @@ namespace SirRandoo.ToolkitRaids
 
                         ToolkitRaids.RecentRaids.Enqueue(result);
 
-                        Log.Message($@"ToolkitRaids :: Scheduled a new raid with leader ""{result}"".");
+                        RaidLogger.Info($@"Scheduled a new raid with leader ""{result}"".");
                     }
                 ),
                 new FloatMenuOption(
@@ -66,7 +66,7 @@ namespace SirRandoo.ToolkitRaids
                             return;
                         }
 
-                        Log.Message("ToolkitRaids :: Forcible starting a new large raid...");
+                        RaidLogger.Info("Forcibly starting a new large raid...");
 
                         var component = Current.Game.GetComponent<GameComponentTwitchRaid>();
 

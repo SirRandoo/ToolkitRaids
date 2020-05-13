@@ -34,7 +34,7 @@ namespace SirRandoo.ToolkitRaids.CommandMethods
 
             if (!component.TryJoinRaid(ViewerController.GetViewer(twitchCommand.Username)))
             {
-                Log.Warning($@"ToolkitRaids :: Could not add ""{twitchCommand.Username}"" to any raid.");
+                RaidLogger.Warn($@"Could not add ""{twitchCommand.Username}"" to any raid.");
             }
         }
     }
