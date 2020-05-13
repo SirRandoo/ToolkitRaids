@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Verse;
 
 namespace SirRandoo.ToolkitRaids
@@ -71,7 +71,7 @@ namespace SirRandoo.ToolkitRaids
                 return;
             }
 
-            Log.Message(@"<color=""#ff8080"">ToolkitRaids :: Twitch raid component is null!");
+            RaidLogger.Warn("Twitch raid component is null!");
             Close();
         }
 
