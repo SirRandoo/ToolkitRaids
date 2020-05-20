@@ -1,4 +1,6 @@
 ﻿using System.Collections.Concurrent;
+using System.Reflection;
+using HarmonyLib;
 using ToolkitCore;
 using TwitchLib.Client.Events;
 using UnityEngine;
@@ -9,10 +11,14 @@ namespace SirRandoo.ToolkitRaids
     public class ToolkitRaids : Mod
     {
         public static readonly ConcurrentQueue<string> RecentRaids = new ConcurrentQueue<string>();
+        private static Harmony _harmony;
 
         public ToolkitRaids(ModContentPack content) : base(content)
         {
             GetSettings<Settings>();
+
+            _harmony = new Harmony("com.sirrandoo.tkraids");
+            _harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
 
         public override void DoSettingsWindowContents(Rect inRect)
@@ -24,19 +30,25 @@ namespace SirRandoo.ToolkitRaids
         {
             return nameof(ToolkitRaids);
         }
+        
+        internal static void OnRaidNotification(object sender, OnRaidNotificationArgs args)
+        {
+            RecentRaids.Enqueue(args.RaidNotification.Login);
+        }
     }
 
-    [StaticConstructorOnStartup]
-    public static class ToolkitRaidsStatic
+    [HarmonyPatch(typeof(TwitchWrapper), "InitializeClient")]
+    public static class TwitchClientPatch
     {
-        static ToolkitRaidsStatic()
+        [HarmonyPostfix]
+        public static void Postfix()
         {
-            TwitchWrapper.Client.OnRaidNotification += OnRaidNotification;
-        }
+            if (TwitchWrapper.Client == null)
+            {
+                return;
+            }
 
-        private static void OnRaidNotification(object sender, OnRaidNotificationArgs args)
-        {
-            ToolkitRaids.RecentRaids.Enqueue(args.RaidNotification.Login);
+            TwitchWrapper.Client.OnRaidNotification += ToolkitRaids.OnRaidNotification;
         }
     }
 }
