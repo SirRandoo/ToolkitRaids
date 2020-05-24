@@ -13,6 +13,12 @@ namespace SirRandoo.ToolkitRaids
 
         protected override string GetLetterText(IncidentParms parms, List<Pawn> pawns)
         {
+            if (parms.faction == Faction.OfMechanoids || parms.faction == Faction.OfInsects)
+            {
+                RaidLogger.Warn("Generated a raid with a non-human faction!");
+                return base.GetLetterText(parms, pawns);
+            }
+            
             var leader = pawns.FirstOrDefault(p => p.Faction.leader == p);
             var army = RaidData.Army.ToList();
 

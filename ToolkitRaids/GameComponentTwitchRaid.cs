@@ -111,6 +111,11 @@ namespace SirRandoo.ToolkitRaids
                 var defaultParms = StorytellerUtility.DefaultParmsNow(IncidentCategoryDefOf.ThreatBig, map);
                 defaultParms.forced = true;
                 defaultParms.points = 36f * (raid.Army.Count + 1);
+                defaultParms.faction = Find.FactionManager.AllFactionsVisibleInViewOrder
+                    .Where(f => !f.IsPlayer)
+                    .Where(f => f.PlayerRelationKind == FactionRelationKind.Hostile)
+                    .Where(f => f.def.humanlikeFaction)
+                    .RandomElementWithFallback(defaultParms.faction);
 
                 var worker = new TwitchRaidWorker {RaidData = raid, def = IncidentDefOf.RaidEnemy};
 
