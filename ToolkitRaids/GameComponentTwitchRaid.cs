@@ -118,14 +118,14 @@ namespace SirRandoo.ToolkitRaids
                         TwitchRaid = raid
                     };
                 var tellerPoints = defaultParms.points;
-                var twitchPoints = 50f * (raid.Army.Count + 1);
+                var twitchPoints = Settings.PointsPerPerson * (raid.Army.Count + 1);
                 var diff = Mathf.Abs(tellerPoints - twitchPoints);
                 var factor = Mathf.Clamp(Mathf.Round((raid.Army.Count + 1f) / 10f), 10f, 100f)
                              + Random.Range(0.75f, 1.5f);
                 var finalPoints = Mathf.Clamp(
                     twitchPoints * (diff / tellerPoints * factor),
                     twitchPoints,
-                    20000f
+                    Settings.MaximumAllowedPoints
                 );
 
                 defaultParms.TwitchRaid = raid;

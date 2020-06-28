@@ -12,6 +12,10 @@
     <ToolkitRaids.MergeRaids.Tooltip>When enabled, the mod will merge separate raids into one massive raid.</ToolkitRaids.MergeRaids.Tooltip>
     <ToolkitRaids.Duration.Label>How long do viewers have, in seconds, to join the raid.</ToolkitRaids.Duration.Label>
     <ToolkitRaids.Duration.Tooltip>The amount of time, in seconds, viewers will have to join the raid event by typing !joinraid in chat.</ToolkitRaids.Duration.Tooltip>
+    <ToolkitRaids.MaxPoints.Label>How high should Twitch raids scale point wise?</ToolkitRaids.MaxPoints.Label>
+    <ToolkitRaids.MaxPoints.Tooltip>The maximum amount of points a raid is permitted to be.</ToolkitRaids.MaxPoints.Tooltip>
+    <ToolkitRaids.PersonPoints.Label>The number of points a person will add to the raid's points.</ToolkitRaids.PersonPoints.Label>
+    <ToolkitRaids.PersonPoints.Tooltip>This value is multiplied by the total number of raiders, including the leader, then used as the raid's points.</ToolkitRaids.PersonPoints.Tooltip>
     
     <!-- Letters -->
     <ToolkitRaids.Letters.Title>{0} Raid</ToolkitRaids.Letters.Title>
