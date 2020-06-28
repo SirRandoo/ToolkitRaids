@@ -13,6 +13,11 @@
     <ToolkitRaids.Duration.Label>How long do viewers have, in seconds, to join the raid.</ToolkitRaids.Duration.Label>
     <ToolkitRaids.Duration.Tooltip>The amount of time, in seconds, viewers will have to join the raid event by typing !joinraid in chat.</ToolkitRaids.Duration.Tooltip>
     
+    <!-- Letters -->
+    <ToolkitRaids.Letters.Title>{0} Raid</ToolkitRaids.Letters.Title>
+    <ToolkitRaids.Letters.Text>An army of {0} viewers led by {1} has amassed nearby.</ToolkitRaids.Letters.Text>
+    <ToolkitRaids.Letters.FailedSubtext>{0} viewers were lost along the way.</ToolkitRaids.Letters.FailedSubtext>
+    
     <!-- Window -->
     <ToolkitRaids.Windows.Raid.Title>An army has amased </ToolkitRaids.Windows.Raid.Title>
     <ToolkitRaids.Windows.Raid.Footer>Type !joinraid to join the raid.</ToolkitRaids.Windows.Raid.Footer>
