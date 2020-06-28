@@ -18,9 +18,7 @@ namespace SirRandoo.ToolkitRaids.CommandMethods
                 return false;
             }
 
-            var component = Current.Game?.GetComponent<GameComponentTwitchRaid>();
-
-            return component != null && component.CanJoinRaid();
+            return Current.Game?.GetComponent<GameComponentTwitchRaid>()?.CanJoinRaid() ?? false;
         }
 
         public override void Execute(ITwitchCommand twitchCommand)

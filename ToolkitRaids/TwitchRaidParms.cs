@@ -4,8 +4,6 @@ namespace SirRandoo.ToolkitRaids
 {
     public class TwitchRaidParms : IncidentParms
     {
-        public Raid TwitchRaid { get; set; }
-
         public TwitchRaidParms(IncidentParms parms)
         {
             target = parms.target;
@@ -39,5 +37,7 @@ namespace SirRandoo.ToolkitRaids
             questTag = parms.questTag;
             mechClusterSketch = parms.mechClusterSketch;
         }
+
+        public Raid TwitchRaid { get; set; }
     }
 }

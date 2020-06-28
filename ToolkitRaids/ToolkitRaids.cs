@@ -30,7 +30,7 @@ namespace SirRandoo.ToolkitRaids
         {
             return nameof(ToolkitRaids);
         }
-        
+
         internal static void OnRaidNotification(object sender, OnRaidNotificationArgs args)
         {
             RecentRaids.Enqueue(args.RaidNotification.Login);

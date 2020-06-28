@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NVorbis.Ogg;
 using RimWorld;
 using UnityEngine;
 using Verse;
-using Random = System.Random;
 
 namespace SirRandoo.ToolkitRaids.Workers
 {
@@ -33,7 +31,11 @@ namespace SirRandoo.ToolkitRaids.Workers
 
                 try
                 {
-                    missingPawns = GenerateMissingPawns(pawnKind, faction, Mathf.Abs(pawns.Count - tParms.TwitchRaid.TotalTroops));
+                    missingPawns = GenerateMissingPawns(
+                        pawnKind,
+                        faction,
+                        Mathf.Abs(pawns.Count - tParms.TwitchRaid.TotalTroops)
+                    );
                 }
                 catch (Exception e)
                 {

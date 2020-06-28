@@ -9,9 +9,9 @@ namespace SirRandoo.ToolkitRaids
         private static readonly Gradient TimerGradient;
 
         private GameComponentTwitchRaid _component;
-        private Vector2 _scrollPos = Vector2.zero;
         private TaggedString _footerText;
         private TaggedString _leaderText;
+        private Vector2 _scrollPos = Vector2.zero;
 
         private TaggedString _titleText;
         private TaggedString _troopText;
@@ -55,10 +55,10 @@ namespace SirRandoo.ToolkitRaids
 
         private void GetTranslations()
         {
-            _titleText = "ToolkitRaids.Windows.Raid.Title".Translate();
-            _troopText = "ToolkitRaids.Windows.Raid.Troops".Translate();
-            _leaderText = "ToolkitRaids.Windows.Raid.Leader".Translate();
-            _footerText = "ToolkitRaids.Windows.Raid.Footer".Translate();
+            _titleText = "ToolkitRaids.Windows.Raid.Title".TranslateSimple();
+            _troopText = "ToolkitRaids.Windows.Raid.Troops".TranslateSimple();
+            _leaderText = "ToolkitRaids.Windows.Raid.Leader".TranslateSimple();
+            _footerText = "ToolkitRaids.Windows.Raid.Footer".TranslateSimple();
         }
 
         public override void PreOpen()

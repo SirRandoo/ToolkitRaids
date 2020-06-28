@@ -16,21 +16,21 @@ namespace SirRandoo.ToolkitRaids
             listing.Begin(canvas);
 
             listing.CheckboxLabeled(
-                "ToolkitRaids.MergeRaids.Label".Translate(),
+                "ToolkitRaids.MergeRaids.Label".TranslateSimple(),
                 ref MergeRaids,
-                "ToolkitRaids.MergeRaids.Tooltip".Translate()
+                "ToolkitRaids.MergeRaids.Tooltip".TranslateSimple()
             );
 
             var (timeLabel, timeField) = ToForm(listing.GetRect(Text.LineHeight));
             var durationBuffer = Duration.ToString();
 
-            Widgets.Label(timeLabel, "ToolkitRaids.Duration.Label".Translate());
+            Widgets.Label(timeLabel, "ToolkitRaids.Duration.Label".TranslateSimple());
             Widgets.TextFieldNumeric(timeField, ref Duration, ref durationBuffer, 30, 600);
 
             if (Mouse.IsOver(timeLabel))
             {
                 Widgets.DrawHighlightIfMouseover(timeLabel);
-                TooltipHandler.TipRegion(timeLabel, "ToolkitRaids.Duration.Tooltip".Translate());
+                TooltipHandler.TipRegion(timeLabel, "ToolkitRaids.Duration.Tooltip".TranslateSimple());
             }
 
             listing.End();

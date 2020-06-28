@@ -9,7 +9,9 @@ namespace SirRandoo.ToolkitRaids
         {
             if (Prefs.DevMode)
             {
-                Log("DEBUG", message);
+            #if DEBUG
+                Log("DEBUG", message, $"#{ColorUtility.ToHtmlStringRGB(ColorLibrary.HotPink)}");
+            #endif
             }
         }
 

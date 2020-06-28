@@ -13,7 +13,7 @@ namespace SirRandoo.ToolkitRaids
             return new List<FloatMenuOption>
             {
                 new FloatMenuOption(
-                    "ToolkitRaids.AddonMenu.Settings".Translate(),
+                    "ToolkitRaids.AddonMenu.Settings".TranslateSimple(),
                     () =>
                     {
                         var window = new Window_ModSettings(LoadedModManager.GetMod<ToolkitRaids>());
@@ -23,7 +23,7 @@ namespace SirRandoo.ToolkitRaids
                     }
                 ),
                 new FloatMenuOption(
-                    "ToolkitRaids.AddonMenu.ForceNoRegister".Translate(),
+                    "ToolkitRaids.AddonMenu.ForceNoRegister".TranslateSimple(),
                     () =>
                     {
                         if (!UnityData.IsInMainThread)
@@ -38,7 +38,7 @@ namespace SirRandoo.ToolkitRaids
                     }
                 ),
                 new FloatMenuOption(
-                    "ToolkitRaids.AddonMenu.ForceNewRaid".Translate(),
+                    "ToolkitRaids.AddonMenu.ForceNewRaid".TranslateSimple(),
                     () =>
                     {
                         if (!UnityData.IsInMainThread)
@@ -58,7 +58,7 @@ namespace SirRandoo.ToolkitRaids
                     }
                 ),
                 new FloatMenuOption(
-                    "ToolkitRaids.AddonMenu.ForceNewRaidLarge".Translate(),
+                    "ToolkitRaids.AddonMenu.ForceNewRaidLarge".TranslateSimple(),
                     () =>
                     {
                         if (!UnityData.IsInMainThread)
