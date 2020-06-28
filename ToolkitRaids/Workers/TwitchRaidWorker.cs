@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
@@ -68,7 +68,7 @@ namespace SirRandoo.ToolkitRaids.Workers
 
             RenamePawns(pawns, limit, leader, army);
 
-            var text = "ToolkitRaids.Letters.Text".Translate(army.Count.ToString("N0"), tParms.TwitchRaid.Leader);
+            var text = "ToolkitRaids.Letters.Text".Translate((army.Count - 1).ToString("N0"), tParms.TwitchRaid.Leader);
 
             if (armyComplete)
             {
