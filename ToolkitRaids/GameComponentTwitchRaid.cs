@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
+using SirRandoo.ToolkitRaids.Workers;
 using ToolkitCore.Models;
 using UnityEngine;
 using Verse;
+using Random = UnityEngine.Random;
 
 namespace SirRandoo.ToolkitRaids
 {
@@ -18,6 +20,8 @@ namespace SirRandoo.ToolkitRaids
         {
             Leader = leader;
         }
+
+        public int TotalTroops => Army.Count + 1;
 
         public void ExposeData()
         {
@@ -108,16 +112,35 @@ namespace SirRandoo.ToolkitRaids
                     continue;
                 }
 
-                var defaultParms = StorytellerUtility.DefaultParmsNow(IncidentCategoryDefOf.ThreatBig, map);
+                var defaultParms =
+                    new TwitchRaidParms(StorytellerUtility.DefaultParmsNow(IncidentCategoryDefOf.ThreatBig, map))
+                    {
+                        TwitchRaid = raid
+                    };
+                var tellerPoints = defaultParms.points;
+                var twitchPoints = 50f * (raid.Army.Count + 1);
+                var diff = Mathf.Abs(tellerPoints - twitchPoints);
+                var factor = Mathf.Clamp(Mathf.Round((raid.Army.Count + 1f) / 10f), 10f, 100f)
+                             + Random.Range(0.75f, 1.5f);
+                var finalPoints = Mathf.Clamp(
+                    twitchPoints * (diff / tellerPoints * factor),
+                    twitchPoints,
+                    20000f
+                );
+
+                defaultParms.TwitchRaid = raid;
+                defaultParms.customLetterLabel = "ToolkitRaids.Letters.Title".Translate(raid.Leader.CapitalizeFirst());
                 defaultParms.forced = true;
-                defaultParms.points = 36f * (raid.Army.Count + 1);
+                defaultParms.raidNeverFleeIndividual = true;
+                defaultParms.points = finalPoints;
+                defaultParms.pawnCount = raid.Army.Count + 1;
                 defaultParms.faction = Find.FactionManager.AllFactionsVisibleInViewOrder
                     .Where(f => !f.IsPlayer)
                     .Where(f => f.PlayerRelationKind == FactionRelationKind.Hostile)
                     .Where(f => f.def.humanlikeFaction)
                     .RandomElementWithFallback(defaultParms.faction);
 
-                var worker = new TwitchRaidWorker {RaidData = raid, def = IncidentDefOf.RaidEnemy};
+                var worker = new TwitchRaidWorker {def = IncidentDefOf.RaidEnemy};
 
                 try
                 {
@@ -154,6 +177,11 @@ namespace SirRandoo.ToolkitRaids
 
         public bool TryJoinRaid(Viewer viewer)
         {
+            if (Enumerable.Any(_raids, r => r.Leader.EqualsIgnoreCase(viewer.Username)))
+            {
+                return false;
+            }
+
             if (Enumerable.Any(_raids, r => r.Army.Any(s => s.Equals(viewer.Username))))
             {
                 return false;
