@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
@@ -124,6 +124,8 @@ namespace SirRandoo.ToolkitRaids
 
                 if (diff > tellerPoints * 0.95f)
                 {
+                    RaidLogger.Debug($"Point differential too high!");
+                    
                     var factor = Mathf.Clamp(Mathf.Round((raid.Army.Count + 1f) / 10f), 10f, 100f)
                                  + Random.Range(0.75f, 1.5f);
                     finalPoints = Mathf.Clamp(
@@ -132,6 +134,11 @@ namespace SirRandoo.ToolkitRaids
                         Settings.MaximumAllowedPoints
                     );
                 }
+                
+                RaidLogger.Debug($"Teller points: {tellerPoints:N4}");
+                RaidLogger.Debug($"ToolkitRaid points: {twitchPoints:N4}");
+                RaidLogger.Debug($"Differential: {diff:N4}");
+                RaidLogger.Debug($"Final points: {finalPoints:N4}");
 
                 defaultParms.TwitchRaid = raid;
                 defaultParms.customLetterLabel = "ToolkitRaids.Letters.Title".Translate(raid.Leader.CapitalizeFirst());
