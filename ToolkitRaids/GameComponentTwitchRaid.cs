@@ -119,14 +119,19 @@ namespace SirRandoo.ToolkitRaids
                     };
                 var tellerPoints = defaultParms.points;
                 var twitchPoints = Settings.PointsPerPerson * (raid.Army.Count + 1);
-                var diff = Mathf.Abs(tellerPoints - twitchPoints);
-                var factor = Mathf.Clamp(Mathf.Round((raid.Army.Count + 1f) / 10f), 10f, 100f)
-                             + Random.Range(0.75f, 1.5f);
-                var finalPoints = Mathf.Clamp(
-                    twitchPoints * (diff / tellerPoints * factor),
-                    twitchPoints,
-                    Settings.MaximumAllowedPoints
-                );
+                var diff = tellerPoints - twitchPoints;
+                var finalPoints = twitchPoints;
+
+                if (diff > 0)
+                {
+                    var factor = Mathf.Clamp(Mathf.Round((raid.Army.Count + 1f) / 10f), 10f, 100f)
+                                 + Random.Range(0.75f, 1.5f);
+                    finalPoints = Mathf.Clamp(
+                        twitchPoints * (diff / tellerPoints * factor),
+                        twitchPoints,
+                        Settings.MaximumAllowedPoints
+                    );
+                }
 
                 defaultParms.TwitchRaid = raid;
                 defaultParms.customLetterLabel = "ToolkitRaids.Letters.Title".Translate(raid.Leader.CapitalizeFirst());
