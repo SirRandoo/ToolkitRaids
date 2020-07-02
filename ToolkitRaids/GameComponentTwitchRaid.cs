@@ -124,7 +124,7 @@ namespace SirRandoo.ToolkitRaids
 
                 if (diff > tellerPoints * 0.95f)
                 {
-                    RaidLogger.Debug($"Point differential too high!");
+                    RaidLogger.Debug("Point differential too high!");
                     
                     var factor = Mathf.Clamp(Mathf.Round((raid.Army.Count + 1f) / 10f), 10f, 100f)
                                  + Random.Range(0.75f, 1.5f);
@@ -133,6 +133,8 @@ namespace SirRandoo.ToolkitRaids
                         twitchPoints,
                         Settings.MaximumAllowedPoints
                     );
+                    
+                    RaidLogger.Warn($"Adjusted the raid's points from {twitchPoints:N2} to {finalPoints:N2} (Storyteller points: {tellerPoints:N2})");
                 }
                 
                 RaidLogger.Debug($"Teller points: {tellerPoints:N4}");
