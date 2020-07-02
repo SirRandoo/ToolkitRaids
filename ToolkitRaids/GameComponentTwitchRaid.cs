@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
@@ -122,7 +122,7 @@ namespace SirRandoo.ToolkitRaids
                 var diff = tellerPoints - twitchPoints;
                 var finalPoints = twitchPoints;
 
-                if (diff > 0)
+                if (diff > tellerPoints * 0.95f)
                 {
                     var factor = Mathf.Clamp(Mathf.Round((raid.Army.Count + 1f) / 10f), 10f, 100f)
                                  + Random.Range(0.75f, 1.5f);
