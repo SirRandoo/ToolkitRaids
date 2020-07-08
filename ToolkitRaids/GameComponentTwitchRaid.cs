@@ -117,36 +117,42 @@ namespace SirRandoo.ToolkitRaids
                     {
                         TwitchRaid = raid
                     };
-                var tellerPoints = defaultParms.points;
-                var twitchPoints = Settings.PointsPerPerson * (raid.Army.Count + 1);
-                var diff = tellerPoints - twitchPoints;
-                var finalPoints = twitchPoints;
 
-                if (diff > tellerPoints * 0.95f)
+                if (!Settings.UseStoryteller)
                 {
-                    RaidLogger.Debug("Point differential too high!");
-                    
-                    var factor = Mathf.Clamp(Mathf.Round((raid.Army.Count + 1f) / 10f), 10f, 100f)
-                                 + Random.Range(0.75f, 1.5f);
-                    finalPoints = Mathf.Clamp(
-                        twitchPoints * (diff / tellerPoints * factor),
-                        twitchPoints,
-                        Settings.MaximumAllowedPoints
-                    );
-                    
-                    RaidLogger.Warn($"Adjusted the raid's points from {twitchPoints:N2} to {finalPoints:N2} (Storyteller points: {tellerPoints:N2})");
+                    var tellerPoints = defaultParms.points;
+                    var twitchPoints = Settings.PointsPerPerson * (raid.Army.Count + 1);
+                    var diff = tellerPoints - twitchPoints;
+                    var finalPoints = twitchPoints;
+
+                    if (diff > tellerPoints * 0.95f)
+                    {
+                        RaidLogger.Debug("Point differential too high!");
+
+                        var factor = Mathf.Clamp(Mathf.Round((raid.Army.Count + 1f) / 10f), 10f, 100f)
+                                     + Random.Range(0.75f, 1.5f);
+                        finalPoints = Mathf.Clamp(
+                            twitchPoints * (diff / tellerPoints * factor),
+                            twitchPoints,
+                            Settings.MaximumAllowedPoints
+                        );
+
+                        RaidLogger.Warn(
+                            $"Adjusted the raid's points from {twitchPoints:N2} to {finalPoints:N2} (Storyteller points: {tellerPoints:N2})"
+                        );
+                    }
+
+                    RaidLogger.Debug($"Teller points: {tellerPoints:N4}");
+                    RaidLogger.Debug($"ToolkitRaid points: {twitchPoints:N4}");
+                    RaidLogger.Debug($"Differential: {diff:N4}");
+                    RaidLogger.Debug($"Final points: {finalPoints:N4}");
+                    defaultParms.points = finalPoints;
                 }
-                
-                RaidLogger.Debug($"Teller points: {tellerPoints:N4}");
-                RaidLogger.Debug($"ToolkitRaid points: {twitchPoints:N4}");
-                RaidLogger.Debug($"Differential: {diff:N4}");
-                RaidLogger.Debug($"Final points: {finalPoints:N4}");
 
                 defaultParms.TwitchRaid = raid;
                 defaultParms.customLetterLabel = "ToolkitRaids.Letters.Title".Translate(raid.Leader.CapitalizeFirst());
                 defaultParms.forced = true;
                 defaultParms.raidNeverFleeIndividual = true;
-                defaultParms.points = finalPoints;
                 defaultParms.pawnCount = raid.Army.Count + 1;
                 defaultParms.faction = Find.FactionManager.AllFactionsVisibleInViewOrder
                     .Where(f => !f.IsPlayer)

@@ -11,6 +11,7 @@ namespace SirRandoo.ToolkitRaids
         public static float PointsPerPerson = 50f;
         public static float MaximumAllowedPoints = 20000f;
         public static bool MergeRaids;
+        public static bool UseStoryteller;
         public static int Duration = 60;
 
         public static void Draw(Rect canvas)
@@ -24,6 +25,17 @@ namespace SirRandoo.ToolkitRaids
                 ref MergeRaids,
                 "ToolkitRaids.MergeRaids.Tooltip".TranslateSimple()
             );
+            listing.CheckboxLabeled(
+                "ToolkitRaids.StorytellerRaid.Label".TranslateSimple(),
+                ref UseStoryteller,
+                "ToolkitRaids.StorytellerRaid.Tooltip".TranslateSimple()
+            );
+
+            if (UseStoryteller)
+            {
+                listing.End();
+                return;
+            }
 
             listing.Gap(8f);
             var line = listing.GetRect(Text.LineHeight).ContractedBy(12f);
@@ -62,6 +74,7 @@ namespace SirRandoo.ToolkitRaids
             Scribe_Values.Look(ref MergeRaids, "mergeRaids");
             Scribe_Values.Look(ref Duration, "duration", 60);
             Scribe_Values.Look(ref MaximumAllowedPoints, "maxPoints", 20000f);
+            Scribe_Values.Look(ref UseStoryteller, "storyteller");
             Scribe_Values.Look(ref PointsPerPerson, "pointsPerPerson", 50f);
         }
 

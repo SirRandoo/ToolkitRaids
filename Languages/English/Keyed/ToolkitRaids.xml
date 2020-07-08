@@ -10,6 +10,8 @@
     <!-- Settings -->
     <ToolkitRaids.MergeRaids.Label>Merge Twitch raids into one.</ToolkitRaids.MergeRaids.Label>
     <ToolkitRaids.MergeRaids.Tooltip>When enabled, the mod will merge separate raids into one massive raid.</ToolkitRaids.MergeRaids.Tooltip>
+    <ToolkitRaids.StorytellerRaid.Label>Generate a default storyteller raid.</ToolkitRaids.StorytellerRaid.Label>
+    <ToolkitRaids.StorytellerRaid.Tooltip>When enabled, the mod will generate a standard raid based on the parameters the storyteller returns. Disabling this exposes more advanced options for adjusting raids points.</ToolkitRaids.StorytellerRaid.Tooltip>
     <ToolkitRaids.Duration.Label>How long do viewers have, in seconds, to join the raid.</ToolkitRaids.Duration.Label>
     <ToolkitRaids.Duration.Tooltip>The amount of time, in seconds, viewers will have to join the raid event by typing !joinraid in chat.</ToolkitRaids.Duration.Tooltip>
     <ToolkitRaids.MaxPoints.Label>How high should Twitch raids scale point wise?</ToolkitRaids.MaxPoints.Label>
