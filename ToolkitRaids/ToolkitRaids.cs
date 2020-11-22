@@ -1,4 +1,6 @@
 ﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using HarmonyLib;
 using JetBrains.Annotations;
@@ -12,6 +14,7 @@ namespace SirRandoo.ToolkitRaids
     [UsedImplicitly]
     public class ToolkitRaids : Mod
     {
+        private static readonly List<string> SpecialNames = new List<string> {"sirrandoo", "hodlhodl"};
         public static readonly ConcurrentQueue<string> RecentRaids = new ConcurrentQueue<string>();
         public static readonly ConcurrentQueue<string> ViewerQueue = new ConcurrentQueue<string>();
 
@@ -35,6 +38,13 @@ namespace SirRandoo.ToolkitRaids
         internal static void OnRaidNotification(object sender, OnRaidNotificationArgs args)
         {
             RecentRaids.Enqueue(args.RaidNotification.Login);
+        }
+
+        internal static string GenerateNameForRaid()
+        {
+            return UnityData.IsInMainThread && Rand.Chance(0.05f)
+                    ? SpecialNames.RandomElement()
+                    : Path.GetRandomFileName().Replace(".", "").Substring(0, 8);
         }
     }
 

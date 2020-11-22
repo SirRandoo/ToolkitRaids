@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using ToolkitCore.Interfaces;
 using ToolkitCore.Windows;
 using Verse;
@@ -14,46 +13,23 @@ namespace SirRandoo.ToolkitRaids
             {
                 new FloatMenuOption(
                     "ToolkitRaids.AddonMenu.Settings".TranslateSimple(),
-                    () =>
-                    {
-                        var window = new Window_ModSettings(LoadedModManager.GetMod<ToolkitRaids>());
-
-                        Find.WindowStack.TryRemove(window.GetType());
-                        Find.WindowStack.Add(window);
-                    }
+                    () => Find.WindowStack.Add(new Window_ModSettings(LoadedModManager.GetMod<ToolkitRaids>()))
                 ),
                 new FloatMenuOption(
                     "ToolkitRaids.AddonMenu.ForceNoRegister".TranslateSimple(),
                     () =>
                     {
-                        if (!UnityData.IsInMainThread)
-                        {
-                            return;
-                        }
-
                         RaidLogger.Warn("Forcibly closing registration for all pending raids...");
-                        var component = Current.Game?.GetComponent<GameComponentTwitchRaid>();
-
-                        component?.ForceCloseRegistry();
+                        Current.Game?.GetComponent<GameComponentTwitchRaid>()?.ForceCloseRegistry();
                     }
                 ),
                 new FloatMenuOption(
                     "ToolkitRaids.AddonMenu.ForceNewRaid".TranslateSimple(),
                     () =>
                     {
-                        if (!UnityData.IsInMainThread)
-                        {
-                            return;
-                        }
-
-                        RaidLogger.Info("Forcibly starting a new raid...");
-
-                        var result = Path.GetRandomFileName()
-                            .Replace(".", "")
-                            .Substring(0, 8);
+                        string result = ToolkitRaids.GenerateNameForRaid();
 
                         ToolkitRaids.RecentRaids.Enqueue(result);
-
                         RaidLogger.Info($@"Scheduled a new raid with leader ""{result}"".");
                     }
                 ),
@@ -61,11 +37,6 @@ namespace SirRandoo.ToolkitRaids
                     "ToolkitRaids.AddonMenu.ForceNewRaidLarge".TranslateSimple(),
                     () =>
                     {
-                        if (!UnityData.IsInMainThread)
-                        {
-                            return;
-                        }
-
                         RaidLogger.Info("Forcibly starting a new large raid...");
 
                         var component = Current.Game.GetComponent<GameComponentTwitchRaid>();
@@ -75,18 +46,11 @@ namespace SirRandoo.ToolkitRaids
                             return;
                         }
 
-                        var leader = Path.GetRandomFileName()
-                            .Replace(".", "")
-                            .Substring(0, 8);
-                        var raid = new Raid(leader);
+                        var raid = new Raid(ToolkitRaids.GenerateNameForRaid());
 
-                        for (var index = 0; index < 20; index++)
+                        for (var index = 0; index < Rand.Range(20, 50); index++)
                         {
-                            raid.Army.Add(
-                                Path.GetRandomFileName()
-                                    .Replace(".", "")
-                                    .Substring(0, 8)
-                            );
+                            raid.Recruit(ToolkitRaids.GenerateNameForRaid());
                         }
 
                         component.RegisterRaid(raid);
