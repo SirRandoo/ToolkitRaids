@@ -15,6 +15,7 @@ namespace SirRandoo.ToolkitRaids
         public List<string> Army = new List<string>();
         public string Leader;
         public float Timer;
+        public string ArmyCountLabel { get; private set; }
 
         public Raid(string leader)
         {
@@ -23,6 +24,18 @@ namespace SirRandoo.ToolkitRaids
 
         public int TotalTroops => Army.Count + 1;
 
+        public void Recruit(string viewer)
+        {
+            Army.Add(viewer);
+            ArmyCountLabel = Army.Count.ToString("N0");
+        }
+
+        public void Unrecruit(string viewer)
+        {
+            Army.RemoveAll(v => v.EqualsIgnoreCase(viewer));
+            ArmyCountLabel = Army.Count.ToString("N0");
+        }
+        
         public void ExposeData()
         {
             Scribe_Deep.Look(ref Timer, "timer");

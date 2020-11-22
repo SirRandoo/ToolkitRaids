@@ -9,12 +9,12 @@ namespace SirRandoo.ToolkitRaids
         private static readonly Gradient TimerGradient;
 
         private GameComponentTwitchRaid _component;
-        private TaggedString _footerText;
-        private TaggedString _leaderText;
+        private string _footerText;
+        private string _leaderText;
         private Vector2 _scrollPos = Vector2.zero;
 
-        private TaggedString _titleText;
-        private TaggedString _troopText;
+        private string _titleText;
+        private string _troopText;
 
         static RaidDialog()
         {
@@ -78,44 +78,44 @@ namespace SirRandoo.ToolkitRaids
         public override void DoWindowContents(Rect inRect)
         {
             GUI.BeginGroup(inRect);
-            var colorCache = GUI.color;
-            var listing = new Listing_Standard();
+            GameFont cache = Text.Font;
+            var listing = new Listing_Standard(GameFont.Small);
 
-            var contentRect = new Rect(0f, 0f, inRect.width, inRect.height - Text.LineHeight);
+            var contentRect = new Rect(0f, 0f, inRect.width, inRect.height - Text.SmallFontHeight);
             var viewPort = new Rect(
                 0f,
                 0f,
                 inRect.width - 16f,
-                _component.AllRaidsForReading.Count * (Text.LineHeight * 3f)
+                _component.AllRaidsForReading.Count * (Text.SmallFontHeight * 3f)
             );
 
-            GUI.BeginGroup(contentRect);
+            listing.Begin(contentRect);
             listing.BeginScrollView(contentRect, ref _scrollPos, ref viewPort);
 
             for (var index = 0; index < _component.AllRaidsForReading.Count; index++)
             {
-                var raid = _component.AllRaidsForReading[index];
-                var line = listing.GetRect(Text.LineHeight * 3f);
+                Raid raid = _component.AllRaidsForReading[index];
+                Rect line = listing.GetRect(Text.LineHeight * 3f);
                 var leaderRect = new Rect(0f, line.y, line.width, Text.LineHeight);
                 var armyRect = new Rect(0f, line.y + Text.LineHeight, line.width, Text.LineHeight);
                 var progressRect = new Rect(0f, line.y + Text.LineHeight * 2f, line.width, Text.LineHeight);
-                var progress = raid.Timer / Settings.Duration;
+                float progress = raid.Timer / Settings.Duration;
 
                 if (index % 2 == 1)
                 {
                     Widgets.DrawLightHighlight(line);
                 }
 
-                Widgets.Label(leaderRect, $"{_leaderText.RawText}: {raid.Leader}");
-                Widgets.Label(armyRect, $"{_troopText.RawText}: {raid.Army.Count:N0}");
+                Widgets.Label(leaderRect, $"{_leaderText}: {raid.Leader}");
+                Widgets.Label(armyRect, $"{_troopText}: {raid.ArmyCountLabel}");
 
 
                 GUI.color = TimerGradient.Evaluate(1f - progress);
                 Widgets.FillableBar(progressRect, progress, Texture2D.whiteTexture, null, true);
-                GUI.color = colorCache;
+                GUI.color = Color.white;
             }
 
-            GUI.EndGroup();
+            listing.End();
             listing.EndScrollView(ref viewPort);
 
             var footerRect = new Rect(0f, inRect.height - Text.LineHeight, inRect.width, Text.LineHeight);
@@ -125,6 +125,7 @@ namespace SirRandoo.ToolkitRaids
             GUI.EndGroup();
 
             GUI.EndGroup();
+            Text.Font = cache;
         }
 
         public override void WindowUpdate()
