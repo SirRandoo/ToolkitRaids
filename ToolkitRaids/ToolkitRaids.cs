@@ -13,7 +13,7 @@ namespace SirRandoo.ToolkitRaids
     public class ToolkitRaids : Mod
     {
         public static readonly ConcurrentQueue<string> RecentRaids = new ConcurrentQueue<string>();
-        private static Harmony _harmony;
+        public static readonly ConcurrentQueue<string> ViewerQueue = new ConcurrentQueue<string>();
 
         public ToolkitRaids(ModContentPack content) : base(content)
         {

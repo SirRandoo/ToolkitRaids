@@ -19,22 +19,12 @@ namespace SirRandoo.ToolkitRaids.CommandMethods
                 return false;
             }
 
-            return Current.Game?.GetComponent<GameComponentTwitchRaid>()?.CanJoinRaid() ?? false;
+            return Current.Game != null;
         }
 
         public override void Execute(ITwitchCommand twitchCommand)
         {
-            var component = Current.Game?.GetComponent<GameComponentTwitchRaid>();
-
-            if (component == null)
-            {
-                return;
-            }
-
-            if (!component.TryJoinRaid(ViewerController.GetViewer(twitchCommand.Username)))
-            {
-                RaidLogger.Warn($@"Could not add ""{twitchCommand.Username}"" to any raid.");
-            }
+            ToolkitRaids.ViewerQueue.Enqueue(twitchCommand.Username);
         }
     }
 }
