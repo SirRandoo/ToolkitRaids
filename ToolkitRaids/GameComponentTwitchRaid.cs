@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using RimWorld;
 using SirRandoo.ToolkitRaids.Workers;
 using ToolkitCore.Models;
@@ -44,6 +45,7 @@ namespace SirRandoo.ToolkitRaids
         }
     }
 
+    [UsedImplicitly]
     public class GameComponentTwitchRaid : GameComponent
     {
         private int _marker;
