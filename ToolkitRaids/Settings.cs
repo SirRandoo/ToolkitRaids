@@ -18,7 +18,7 @@ namespace SirRandoo.ToolkitRaids
         {
             var listing = new Listing_Standard(GameFont.Small) {maxOneColumn = true};
 
-            listing.Begin(canvas);
+            listing.Begin(canvas.ContractedBy(16f));
 
             listing.CheckboxLabeled("ToolkitRaids.MergeRaids.Label".TranslateSimple(), ref MergeRaids);
             listing.DrawDescription("ToolkitRaids.MergeRaids.Description".TranslateSimple());
