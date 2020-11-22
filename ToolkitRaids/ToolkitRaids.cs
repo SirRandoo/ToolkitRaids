@@ -19,8 +19,7 @@ namespace SirRandoo.ToolkitRaids
         {
             GetSettings<Settings>();
 
-            _harmony = new Harmony("com.sirrandoo.tkraids");
-            _harmony.PatchAll(Assembly.GetExecutingAssembly());
+            new Harmony("com.sirrandoo.tkraids").PatchAll(Assembly.GetExecutingAssembly());
         }
 
         public override void DoSettingsWindowContents(Rect inRect)
