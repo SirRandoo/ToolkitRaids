@@ -21,7 +21,7 @@ namespace SirRandoo.ToolkitRaids
             Leader = leader;
         }
 
-        public string ArmyCountLabel { get; private set; }
+        public string ArmyCountLabel { get; private set; } = "0";
 
         public int TotalTroops => Army.Count + 1;
 
