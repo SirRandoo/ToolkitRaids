@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using Verse;
 
 namespace SirRandoo.ToolkitRaids
 {
@@ -39,5 +40,13 @@ namespace SirRandoo.ToolkitRaids
         }
 
         public Raid TwitchRaid { get; set; }
+
+        public static TwitchRaidParms ForRaid(Raid raid, Map map)
+        {
+            return new TwitchRaidParms(StorytellerUtility.DefaultParmsNow(IncidentCategoryDefOf.ThreatBig, map))
+            {
+                TwitchRaid = raid
+            };
+        }
     }
 }
