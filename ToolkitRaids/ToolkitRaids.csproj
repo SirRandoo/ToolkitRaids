@@ -62,6 +62,15 @@
         <Compile Include="Workers\TwitchRaidWorker.cs"/>
     </ItemGroup>
     <ItemGroup>
+        <Content Include="..\Common\Defs\Addon.xml">
+            <Link>Common\Defs\Addon.xml</Link>
+        </Content>
+        <Content Include="..\Common\Defs\Commands.xml">
+            <Link>Common\Defs\Commands.xml</Link>
+        </Content>
+        <Content Include="..\Common\Languages\English\Keyed\ToolkitRaids.xml">
+            <Link>Common\Languages\English\Keyed\ToolkitRaids.xml</Link>
+        </Content>
         <Content Include="..\README.md">
             <Link>README.md</Link>
         </Content>
