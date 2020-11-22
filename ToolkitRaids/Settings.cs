@@ -24,6 +24,14 @@ namespace SirRandoo.ToolkitRaids
             listing.DrawDescription("ToolkitRaids.MergeRaids.Description".TranslateSimple());
             listing.CheckboxLabeled("ToolkitRaids.StorytellerRaid.Label".TranslateSimple(), ref UseStoryteller);
             listing.DrawDescription("ToolkitRaids.StorytellerRaid.Description".TranslateSimple());
+            
+            (Rect timeLabel, Rect timeField) = listing.GetRectAsForm();
+            var durationBuffer = Duration.ToString();
+
+            Widgets.Label(timeLabel, "ToolkitRaids.Duration.Label".TranslateSimple());
+            Widgets.TextFieldNumeric(timeField, ref Duration, ref durationBuffer, 30, 600);
+            Widgets.DrawHighlightIfMouseover(timeLabel);
+            listing.DrawDescription("ToolkitRaids.Duration.Description".TranslateSimple());
 
             if (UseStoryteller)
             {
@@ -35,14 +43,6 @@ namespace SirRandoo.ToolkitRaids
             Rect line = listing.GetRect(Text.LineHeight).ContractedBy(12f);
             Widgets.DrawLineHorizontal(line.x, line.y, line.width);
             listing.Gap();
-
-            (Rect timeLabel, Rect timeField) = listing.GetRectAsForm();
-            var durationBuffer = Duration.ToString();
-
-            Widgets.Label(timeLabel, "ToolkitRaids.Duration.Label".TranslateSimple());
-            Widgets.TextFieldNumeric(timeField, ref Duration, ref durationBuffer, 30, 600);
-            Widgets.DrawHighlightIfMouseover(timeLabel);
-            listing.DrawDescription("ToolkitRaids.Duration.Description".TranslateSimple());
 
             (Rect personLabel, Rect personField) = listing.GetRectAsForm();
             var personBuffer = PointsPerPerson.ToString(CultureInfo.InvariantCulture);
