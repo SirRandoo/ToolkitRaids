@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Reflection;
 using HarmonyLib;
+using JetBrains.Annotations;
 using ToolkitCore;
 using TwitchLib.Client.Events;
 using UnityEngine;
@@ -8,6 +9,7 @@ using Verse;
 
 namespace SirRandoo.ToolkitRaids
 {
+    [UsedImplicitly]
     public class ToolkitRaids : Mod
     {
         public static readonly ConcurrentQueue<string> RecentRaids = new ConcurrentQueue<string>();
@@ -37,6 +39,7 @@ namespace SirRandoo.ToolkitRaids
         }
     }
 
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     [HarmonyPatch(typeof(TwitchWrapper), "InitializeClient")]
     public static class TwitchClientPatch
     {

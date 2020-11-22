@@ -1,10 +1,11 @@
-﻿using ToolkitCore.Controllers;
+﻿using JetBrains.Annotations;
 using ToolkitCore.Models;
 using TwitchLib.Client.Interfaces;
 using Verse;
 
 namespace SirRandoo.ToolkitRaids.CommandMethods
 {
+    [UsedImplicitly]
     public class JoinRaidCommand : CommandMethod
     {
         public JoinRaidCommand(ToolkitChatCommand command) : base(command)
