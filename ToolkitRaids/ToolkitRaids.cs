@@ -40,7 +40,6 @@ namespace SirRandoo.ToolkitRaids
     [HarmonyPatch(typeof(TwitchWrapper), "InitializeClient")]
     public static class TwitchClientPatch
     {
-        [HarmonyPostfix]
         public static void Postfix()
         {
             if (TwitchWrapper.Client == null)
