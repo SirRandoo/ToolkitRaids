@@ -4,7 +4,6 @@ using System.Linq;
 using JetBrains.Annotations;
 using RimWorld;
 using SirRandoo.ToolkitRaids.Workers;
-using ToolkitCore.Models;
 using UnityEngine;
 using Verse;
 using Random = UnityEngine.Random;
@@ -16,14 +15,22 @@ namespace SirRandoo.ToolkitRaids
         public List<string> Army = new List<string>();
         public string Leader;
         public float Timer;
-        public string ArmyCountLabel { get; private set; }
 
         public Raid(string leader)
         {
             Leader = leader;
         }
 
+        public string ArmyCountLabel { get; private set; }
+
         public int TotalTroops => Army.Count + 1;
+
+        public void ExposeData()
+        {
+            Scribe_Deep.Look(ref Timer, "timer");
+            Scribe_Deep.Look(ref Leader, "leader");
+            Scribe_Collections.Look(ref Army, "army", LookMode.Value);
+        }
 
         public void Recruit(string viewer)
         {
@@ -36,12 +43,79 @@ namespace SirRandoo.ToolkitRaids
             Army.RemoveAll(v => v.EqualsIgnoreCase(viewer));
             ArmyCountLabel = Army.Count.ToString("N0");
         }
-        
-        public void ExposeData()
+
+        internal void Tick()
         {
-            Scribe_Deep.Look(ref Timer, "timer");
-            Scribe_Deep.Look(ref Leader, "leader");
-            Scribe_Collections.Look(ref Army, "army", LookMode.Value);
+            Timer -= 1;
+
+            if (Timer <= 0)
+            {
+                Spawn();
+            }
+        }
+
+        private void Spawn()
+        {
+            Map map = Current.Game.Maps.Where(m => m.IsPlayerHome).RandomElementWithFallback();
+
+            if (map == null)
+            {
+                return;
+            }
+
+            TwitchRaidParms defaultParms = TwitchRaidParms.ForRaid(this, map);
+
+            if (!Settings.UseStoryteller)
+            {
+                float tellerPoints = defaultParms.points;
+                float twitchPoints = Settings.PointsPerPerson * (Army.Count + 1);
+                float diff = tellerPoints - twitchPoints;
+                float finalPoints = twitchPoints;
+
+                if (diff > tellerPoints * 0.95f)
+                {
+                    RaidLogger.Debug("Point differential too high!");
+
+                    float factor = Mathf.Clamp(Mathf.Round((Army.Count + 1f) / 10f), 10f, 100f)
+                                   + Random.Range(0.75f, 1.5f);
+                    finalPoints = Mathf.Clamp(
+                        twitchPoints * (diff / tellerPoints * factor),
+                        twitchPoints,
+                        Settings.MaximumAllowedPoints
+                    );
+
+                    RaidLogger.Warn(
+                        $"Adjusted the raid's points from {twitchPoints:N2} to {finalPoints:N2} (Storyteller points: {tellerPoints:N2})"
+                    );
+                }
+
+                RaidLogger.Debug($"Teller points: {tellerPoints:N4}");
+                RaidLogger.Debug($"ToolkitRaid points: {twitchPoints:N4}");
+                RaidLogger.Debug($"Differential: {diff:N4}");
+                RaidLogger.Debug($"Final points: {finalPoints:N4}");
+                defaultParms.points = finalPoints;
+            }
+
+            defaultParms.TwitchRaid = this;
+            defaultParms.customLetterLabel = "ToolkitRaids.Letters.Title".Translate(Leader.CapitalizeFirst());
+            defaultParms.forced = true;
+            defaultParms.raidNeverFleeIndividual = true;
+            defaultParms.pawnCount = Army.Count + 1;
+            defaultParms.faction = Find.FactionManager.AllFactionsVisibleInViewOrder.Where(f => !f.IsPlayer)
+               .Where(f => f.PlayerRelationKind == FactionRelationKind.Hostile)
+               .Where(f => f.def.humanlikeFaction)
+               .RandomElementWithFallback(defaultParms.faction);
+
+            var worker = new TwitchRaidWorker {def = IncidentDefOf.RaidEnemy};
+
+            try
+            {
+                worker.TryExecute(defaultParms);
+            }
+            catch (Exception e)
+            {
+                RaidLogger.Error("Could not execute raid worker", e);
+            }
         }
     }
 
@@ -51,184 +125,128 @@ namespace SirRandoo.ToolkitRaids
         private int _marker;
         private List<Raid> _raids = new List<Raid>();
 
-        public GameComponentTwitchRaid(Game game)
-        {
-        }
+        public GameComponentTwitchRaid(Game game) { }
 
         public List<Raid> AllRaidsForReading => _raids.ToList();
 
         public override void GameComponentTick()
         {
-            while (!ToolkitRaids.RecentRaids.IsEmpty)
-            {
-                if (!ToolkitRaids.RecentRaids.TryDequeue(out var result))
-                {
-                    break;
-                }
+            ProcessRaidQueue();
+            ProcessViewerQueue();
 
-                if (result.NullOrEmpty())
-                {
-                    RaidLogger.Warn("Received an invalid raider.");
-                    continue;
-                }
-
-                if (Settings.MergeRaids)
-                {
-                    var existing = _raids.FirstOrDefault();
-
-                    if (existing == null)
-                    {
-                        _raids.Add(new Raid(result) {Timer = Settings.Duration});
-                    }
-                    else
-                    {
-                        existing.Army.Add(result);
-                    }
-                }
-                else
-                {
-                    if (_raids.Any(l => l.Leader.Equals(result)))
-                    {
-                        RaidLogger.Warn("Received a duplicate raid.");
-                        continue;
-                    }
-
-                    _raids.Add(new Raid(result) {Timer = Settings.Duration});
-                }
-            }
-
-            if (_raids.Any() && !Find.WindowStack.IsOpen(typeof(RaidDialog)))
+            if (_raids.Count > 0 && !Find.WindowStack.IsOpen(typeof(RaidDialog)))
             {
                 Find.WindowStack.Add(new RaidDialog());
             }
 
-            if (Mathf.FloorToInt(Time.unscaledTime) <= _marker)
+            int currentTime = Mathf.FloorToInt(Time.unscaledTime);
+            if (currentTime <= _marker)
             {
                 return;
             }
 
-            _marker = Mathf.FloorToInt(Time.unscaledTime);
+            _marker = currentTime;
 
-            for (var index = _raids.Count - 1; index >= 0; index--)
+            foreach (Raid raid in _raids)
             {
-                var raid = _raids[index];
+                raid.Tick();
+            }
 
-                raid.Timer -= 1;
+            _raids.RemoveAll(r => r.Timer <= 0);
+        }
 
-                if (raid.Timer > 0f)
+        private void ProcessViewerQueue()
+        {
+            while (!ToolkitRaids.ViewerQueue.IsEmpty)
+            {
+                if (!ToolkitRaids.ViewerQueue.TryDequeue(out string result) || result.NullOrEmpty())
+                {
+                    break;
+                }
+
+                RecruitViewer(result);
+            }
+        }
+
+        private void ProcessRaidQueue()
+        {
+            while (!ToolkitRaids.RecentRaids.IsEmpty)
+            {
+                if (!ToolkitRaids.RecentRaids.TryDequeue(out string result) || result.NullOrEmpty())
+                {
+                    break;
+                }
+
+                ProcessRaid(result);
+            }
+        }
+
+        private void RecruitViewer(string viewer)
+        {
+            if (!CanJoinRaid(viewer))
+            {
+                return;
+            }
+
+            var chance = 1f;
+            foreach (Raid raid in _raids.Where(
+                r => r.Timer > 0 && !r.Leader.EqualsIgnoreCase(viewer) && !r.Army.Contains(viewer)
+            ))
+            {
+                if (!Rand.Chance(chance))
                 {
                     continue;
                 }
 
-                var map = Current.Game.Maps.Where(m => m.IsPlayerHome).RandomElementWithFallback();
+                raid.Recruit(viewer);
+                chance -= Mathf.Clamp(Rand.Range(0.05f, 0.5f), 0f, 1f);
+            }
+        }
 
-                if (map == null)
+        private void ProcessRaid(string result)
+        {
+            if (Settings.MergeRaids)
+            {
+                Raid existing = _raids.FirstOrDefault();
+
+                if (existing == null)
                 {
-                    continue;
+                    _raids.Add(new Raid(result) {Timer = Settings.Duration});
+                }
+                else
+                {
+                    existing.Army.Add(result);
+                }
+            }
+            else
+            {
+                if (_raids.Any(l => l.Leader.Equals(result)))
+                {
+                    RaidLogger.Warn("Received a duplicate raid.");
+                    return;
                 }
 
-                var defaultParms =
-                    new TwitchRaidParms(StorytellerUtility.DefaultParmsNow(IncidentCategoryDefOf.ThreatBig, map))
-                    {
-                        TwitchRaid = raid
-                    };
-
-                if (!Settings.UseStoryteller)
-                {
-                    var tellerPoints = defaultParms.points;
-                    var twitchPoints = Settings.PointsPerPerson * (raid.Army.Count + 1);
-                    var diff = tellerPoints - twitchPoints;
-                    var finalPoints = twitchPoints;
-
-                    if (diff > tellerPoints * 0.95f)
-                    {
-                        RaidLogger.Debug("Point differential too high!");
-
-                        var factor = Mathf.Clamp(Mathf.Round((raid.Army.Count + 1f) / 10f), 10f, 100f)
-                                     + Random.Range(0.75f, 1.5f);
-                        finalPoints = Mathf.Clamp(
-                            twitchPoints * (diff / tellerPoints * factor),
-                            twitchPoints,
-                            Settings.MaximumAllowedPoints
-                        );
-
-                        RaidLogger.Warn(
-                            $"Adjusted the raid's points from {twitchPoints:N2} to {finalPoints:N2} (Storyteller points: {tellerPoints:N2})"
-                        );
-                    }
-
-                    RaidLogger.Debug($"Teller points: {tellerPoints:N4}");
-                    RaidLogger.Debug($"ToolkitRaid points: {twitchPoints:N4}");
-                    RaidLogger.Debug($"Differential: {diff:N4}");
-                    RaidLogger.Debug($"Final points: {finalPoints:N4}");
-                    defaultParms.points = finalPoints;
-                }
-
-                defaultParms.TwitchRaid = raid;
-                defaultParms.customLetterLabel = "ToolkitRaids.Letters.Title".Translate(raid.Leader.CapitalizeFirst());
-                defaultParms.forced = true;
-                defaultParms.raidNeverFleeIndividual = true;
-                defaultParms.pawnCount = raid.Army.Count + 1;
-                defaultParms.faction = Find.FactionManager.AllFactionsVisibleInViewOrder
-                    .Where(f => !f.IsPlayer)
-                    .Where(f => f.PlayerRelationKind == FactionRelationKind.Hostile)
-                    .Where(f => f.def.humanlikeFaction)
-                    .RandomElementWithFallback(defaultParms.faction);
-
-                var worker = new TwitchRaidWorker {def = IncidentDefOf.RaidEnemy};
-
-                try
-                {
-                    worker.TryExecute(defaultParms);
-                }
-                catch (Exception e)
-                {
-                    RaidLogger.Error("Could not execute raid worker", e);
-                }
-                finally
-                {
-                    _raids.RemoveAt(index);
-                }
+                _raids.Add(new Raid(result) {Timer = Settings.Duration});
             }
         }
 
         public void ForceCloseRegistry()
         {
-            foreach (var raid in _raids)
+            foreach (Raid raid in _raids)
             {
                 raid.Timer = -10f;
             }
         }
 
-        public bool CanJoinRaid()
+        public bool CanJoinRaid(string viewer)
         {
-            return _raids.Any(r => r.Timer > 0f);
+            return _raids.Where(r => r.Timer > 0f)
+               .Any(r => !r.Leader.EqualsIgnoreCase(viewer) && !r.Army.Contains(viewer.ToLowerInvariant()));
         }
 
         public void RegisterRaid(Raid raid)
         {
             _raids.Add(raid);
-        }
-
-        public bool TryJoinRaid(Viewer viewer)
-        {
-            if (Enumerable.Any(_raids, r => r.Leader.EqualsIgnoreCase(viewer.Username)))
-            {
-                return false;
-            }
-
-            if (Enumerable.Any(_raids, r => r.Army.Any(s => s.Equals(viewer.Username))))
-            {
-                return false;
-            }
-
-            if (!_raids.TryRandomElement(out var raid))
-            {
-                return false;
-            }
-
-            raid.Army.Add(viewer.Username);
-            return true;
         }
 
         public override void ExposeData()
