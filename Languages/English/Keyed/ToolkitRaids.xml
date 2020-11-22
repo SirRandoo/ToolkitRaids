@@ -25,7 +25,7 @@
     <ToolkitRaids.Letters.FailedSubtext>{0} viewers were lost along the way.</ToolkitRaids.Letters.FailedSubtext>
     
     <!-- Window -->
-    <ToolkitRaids.Windows.Raid.Title>An army has amased </ToolkitRaids.Windows.Raid.Title>
+    <ToolkitRaids.Windows.Raid.Title>An army has amassed</ToolkitRaids.Windows.Raid.Title>
     <ToolkitRaids.Windows.Raid.Footer>Type !joinraid to join the raid.</ToolkitRaids.Windows.Raid.Footer>
     <ToolkitRaids.Windows.Raid.Leader>Raid leader</ToolkitRaids.Windows.Raid.Leader>
     <ToolkitRaids.Windows.Raid.Troops>Troops</ToolkitRaids.Windows.Raid.Troops>
