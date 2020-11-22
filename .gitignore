@@ -75,3 +75,6 @@ crashlytics-build.properties
 /ToolkitRaids/obj/
 /.idea
 /1.1/Assemblies/
+/1.2/Assemblies/
+/ToolkitRaids/ToolkitRaids.csproj.DotSettings
+/_PublisherPlus.xml
