@@ -25,8 +25,8 @@ namespace SirRandoo.ToolkitRaids.Workers
 
             if (pawns.Count < tParms.TwitchRaid.TotalTroops)
             {
-                var faction = pawns.FirstOrDefault()?.Faction;
-                var pawnKind = pawns.FirstOrDefault()?.kindDef;
+                Faction faction = pawns.FirstOrDefault()?.Faction;
+                PawnKindDef pawnKind = pawns.FirstOrDefault()?.kindDef;
                 var missingPawns = new List<Pawn>();
 
                 try
@@ -50,9 +50,9 @@ namespace SirRandoo.ToolkitRaids.Workers
                 }
             }
 
-            var leader = pawns.FirstOrDefault(p => p.Faction.leader == p);
-            var army = tParms.TwitchRaid.Army.ToList();
-            var armyComplete = pawns.Count >= tParms.TwitchRaid.TotalTroops;
+            Pawn leader = pawns.FirstOrDefault(p => p.Faction.leader == p);
+            List<string> army = tParms.TwitchRaid.Army.ToList();
+            bool armyComplete = pawns.Count >= tParms.TwitchRaid.TotalTroops;
 
             if (leader != null)
             {
@@ -64,11 +64,11 @@ namespace SirRandoo.ToolkitRaids.Workers
                 army.Insert(0, tParms.TwitchRaid.Leader);
             }
 
-            var limit = Mathf.Min(pawns.Count, army.Count);
+            int limit = Mathf.Min(pawns.Count, army.Count);
 
             RenamePawns(pawns, limit, leader, army);
 
-            TaggedString text = "ToolkitRaids.Letters.Text".Translate((army.Count - 1).ToString("N0"), tParms.TwitchRaid.Leader);
+            string text = "ToolkitRaids.Letters.Text".Translate(tParms.TwitchRaid.ArmyCountLabel, tParms.TwitchRaid.Leader);
             string strategy = GetKeyForStrategy(tParms.raidStrategy);
 
             if (!strategy.NullOrEmpty())
@@ -111,7 +111,7 @@ namespace SirRandoo.ToolkitRaids.Workers
         {
             for (var index = 0; index < limit; index++)
             {
-                var pawn = pawns[index];
+                Pawn pawn = pawns[index];
 
                 if (pawn == leader)
                 {
@@ -143,7 +143,7 @@ namespace SirRandoo.ToolkitRaids.Workers
 
             for (var index = 0; index < count; ++index)
             {
-                var pawn = PawnGenerator.GeneratePawn(
+                Pawn pawn = PawnGenerator.GeneratePawn(
                     new PawnGenerationRequest(
                         kind,
                         faction,
