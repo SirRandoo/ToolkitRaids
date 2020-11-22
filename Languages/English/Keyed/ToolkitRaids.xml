@@ -9,15 +9,15 @@
     
     <!-- Settings -->
     <ToolkitRaids.MergeRaids.Label>Merge Twitch raids into one.</ToolkitRaids.MergeRaids.Label>
-    <ToolkitRaids.MergeRaids.Tooltip>When enabled, the mod will merge separate raids into one massive raid.</ToolkitRaids.MergeRaids.Tooltip>
+    <ToolkitRaids.MergeRaids.Description>When enabled, the mod will merge all raids into one singular one. This singular raid will be the oldest active raid that's accepting viewers via !joinraid.</ToolkitRaids.MergeRaids.Description>
     <ToolkitRaids.StorytellerRaid.Label>Generate a default storyteller raid.</ToolkitRaids.StorytellerRaid.Label>
-    <ToolkitRaids.StorytellerRaid.Tooltip>When enabled, the mod will generate a standard raid based on the parameters the storyteller returns. Disabling this exposes more advanced options for adjusting raids points.</ToolkitRaids.StorytellerRaid.Tooltip>
+    <ToolkitRaids.StorytellerRaid.Description>When enabled, the mod will generate a standard raid based on the parameters the storyteller returns. The parameters will be based off a standard big threat raid on any player owned map. Disabling this expose more advanced settings that'll allow you to fine tune some of the point calculations the mod will do.</ToolkitRaids.StorytellerRaid.Description>
     <ToolkitRaids.Duration.Label>How long do viewers have, in seconds, to join the raid.</ToolkitRaids.Duration.Label>
-    <ToolkitRaids.Duration.Tooltip>The amount of time, in seconds, viewers will have to join the raid event by typing !joinraid in chat.</ToolkitRaids.Duration.Tooltip>
+    <ToolkitRaids.Duration.Description>The amount of time, in seconds, viewers will have to join the raid event by typing !joinraid in chat. Changing this value only affects raids received after the change.</ToolkitRaids.Duration.Description>
     <ToolkitRaids.MaxPoints.Label>How high should Twitch raids scale point wise?</ToolkitRaids.MaxPoints.Label>
-    <ToolkitRaids.MaxPoints.Tooltip>The maximum amount of points a raid is permitted to be.</ToolkitRaids.MaxPoints.Tooltip>
+    <ToolkitRaids.MaxPoints.Description>The maximum amount of points a raid is permitted to be. While you can set this higher than normally permitted by RimWorld, the game may still adjust the maximum points to a lower value.</ToolkitRaids.MaxPoints.Description>
     <ToolkitRaids.PersonPoints.Label>The number of points a person will add to the raid's points.</ToolkitRaids.PersonPoints.Label>
-    <ToolkitRaids.PersonPoints.Tooltip>This value is multiplied by the total number of raiders, including the leader, then used as the raid's points.</ToolkitRaids.PersonPoints.Tooltip>
+    <ToolkitRaids.PersonPoints.Description>The amount of points a single raider, including the raid leader, is valued at. The final calculated value will then be adjusted to be on par with a standard storyteller raid.</ToolkitRaids.PersonPoints.Description>
     
     <!-- Letters -->
     <ToolkitRaids.Letters.Title>{0} Raid</ToolkitRaids.Letters.Title>

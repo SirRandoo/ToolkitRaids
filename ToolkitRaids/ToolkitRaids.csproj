@@ -42,6 +42,7 @@
         <Compile Include="AddonMenu.cs" />
         <Compile Include="CommandMethods\JoinRaidCommand.cs" />
         <Compile Include="GameComponentTwitchRaid.cs" />
+        <Compile Include="Helpers\SettingsHelper.cs" />
         <Compile Include="RaidDialog.cs" />
         <Compile Include="RaidLogger.cs" />
         <Compile Include="Settings.cs" />

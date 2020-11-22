@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
+using SirRandoo.ToolkitRaids.Helpers;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Verse;
 
 namespace SirRandoo.ToolkitRaids
@@ -16,20 +16,14 @@ namespace SirRandoo.ToolkitRaids
 
         public static void Draw(Rect canvas)
         {
-            var listing = new Listing_Standard {maxOneColumn = true};
+            var listing = new Listing_Standard(GameFont.Small) {maxOneColumn = true};
 
             listing.Begin(canvas);
 
-            listing.CheckboxLabeled(
-                "ToolkitRaids.MergeRaids.Label".TranslateSimple(),
-                ref MergeRaids,
-                "ToolkitRaids.MergeRaids.Tooltip".TranslateSimple()
-            );
-            listing.CheckboxLabeled(
-                "ToolkitRaids.StorytellerRaid.Label".TranslateSimple(),
-                ref UseStoryteller,
-                "ToolkitRaids.StorytellerRaid.Tooltip".TranslateSimple()
-            );
+            listing.CheckboxLabeled("ToolkitRaids.MergeRaids.Label".TranslateSimple(), ref MergeRaids);
+            listing.DrawDescription("ToolkitRaids.MergeRaids.Description".TranslateSimple());
+            listing.CheckboxLabeled("ToolkitRaids.StorytellerRaid.Label".TranslateSimple(), ref UseStoryteller);
+            listing.DrawDescription("ToolkitRaids.StorytellerRaid.Description".TranslateSimple());
 
             if (UseStoryteller)
             {
@@ -38,33 +32,33 @@ namespace SirRandoo.ToolkitRaids
             }
 
             listing.Gap(8f);
-            var line = listing.GetRect(Text.LineHeight).ContractedBy(12f);
+            Rect line = listing.GetRect(Text.LineHeight).ContractedBy(12f);
             Widgets.DrawLineHorizontal(line.x, line.y, line.width);
             listing.Gap();
 
-            var (timeLabel, timeField) = ToForm(listing.GetRect(Text.LineHeight));
+            (Rect timeLabel, Rect timeField) = listing.GetRectAsForm();
             var durationBuffer = Duration.ToString();
 
             Widgets.Label(timeLabel, "ToolkitRaids.Duration.Label".TranslateSimple());
             Widgets.TextFieldNumeric(timeField, ref Duration, ref durationBuffer, 30, 600);
             Widgets.DrawHighlightIfMouseover(timeLabel);
-            TooltipHandler.TipRegion(timeLabel, "ToolkitRaids.Duration.Tooltip".TranslateSimple());
+            listing.DrawDescription("ToolkitRaids.Duration.Description".TranslateSimple());
 
-            var (personLabel, personField) = ToForm(listing.GetRect(Text.LineHeight));
+            (Rect personLabel, Rect personField) = listing.GetRectAsForm();
             var personBuffer = PointsPerPerson.ToString(CultureInfo.InvariantCulture);
 
             Widgets.Label(personLabel, "ToolkitRaids.PersonPoints.Label".TranslateSimple());
             Widgets.TextFieldNumeric(personField, ref PointsPerPerson, ref personBuffer, 1f);
             Widgets.DrawHighlightIfMouseover(personLabel);
-            TooltipHandler.TipRegion(personLabel, "ToolkitRaids.PersonPoints.Tooltip".TranslateSimple());
+            listing.DrawDescription("ToolkitRaids.PersonPoints.Description".TranslateSimple());
 
-            var (maxLabel, maxField) = ToForm(listing.GetRect(Text.LineHeight));
+            (Rect maxLabel, Rect maxField) = listing.GetRectAsForm();
             var maxBuffer = MaximumAllowedPoints.ToString(CultureInfo.InvariantCulture);
 
             Widgets.Label(maxLabel, "ToolkitRaids.MaxPoints.Label".TranslateSimple());
             Widgets.TextFieldNumeric(maxField, ref MaximumAllowedPoints, ref maxBuffer, PointsPerPerson);
             Widgets.DrawHighlightIfMouseover(maxLabel);
-            TooltipHandler.TipRegion(maxLabel, "ToolkitRaids.MaxPoints.Tooltip".TranslateSimple());
+            listing.DrawDescription("ToolkitRaids.MaxPoints.Description".TranslateSimple());
 
             listing.End();
         }
@@ -76,16 +70,6 @@ namespace SirRandoo.ToolkitRaids
             Scribe_Values.Look(ref MaximumAllowedPoints, "maxPoints", 20000f);
             Scribe_Values.Look(ref UseStoryteller, "storyteller");
             Scribe_Values.Look(ref PointsPerPerson, "pointsPerPerson", 50f);
-        }
-
-        public static Tuple<Rect, Rect> ToForm(Rect region)
-        {
-            var left = new Rect(region.x, region.y, region.width * 0.85f - 2f, region.height);
-
-            return new Tuple<Rect, Rect>(
-                left,
-                new Rect(left.x + left.width + 2f, left.y, region.width - left.width - 2f, left.height)
-            );
         }
     }
 }
