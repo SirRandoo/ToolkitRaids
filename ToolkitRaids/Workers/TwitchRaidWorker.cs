@@ -68,7 +68,13 @@ namespace SirRandoo.ToolkitRaids.Workers
 
             RenamePawns(pawns, limit, leader, army);
 
-            var text = "ToolkitRaids.Letters.Text".Translate((army.Count - 1).ToString("N0"), tParms.TwitchRaid.Leader);
+            TaggedString text = "ToolkitRaids.Letters.Text".Translate((army.Count - 1).ToString("N0"), tParms.TwitchRaid.Leader);
+            string strategy = GetKeyForStrategy(tParms.raidStrategy);
+
+            if (!strategy.NullOrEmpty())
+            {
+                text += " " + strategy.TranslateSimple();
+            }
 
             if (armyComplete)
             {
@@ -79,6 +85,26 @@ namespace SirRandoo.ToolkitRaids.Workers
             text += "ToolkitRaids.Letters.FailedSubtext".Translate(Mathf.Abs(pawns.Count - army.Count));
 
             return text;
+        }
+
+        private static string GetKeyForStrategy(Def strategy)
+        {
+            switch (strategy.defName)
+            {
+                case "ImmediateAttack":
+                    return "ToolkitRaids.Letters.Strategy.Immediate";
+                case "ImmediateAttackSmart":
+                    return "ToolkitRaids.Letters.Strategy.ImmediateSmart";
+                case "StageThenAttack":
+                    return "ToolkitRaids.Letters.Strategy.Wait";
+                case "ImmediateAttackSappers":
+                    return "ToolkitRaids.Letters.Strategy.Sapper";
+                case "Siege":
+                case "SiegeMechanoid":
+                    return "ToolkitRaids.Letters.Strategy.Siege";
+                default:
+                    return "ToolkitRaids.Letters.Strategy.Unknown";
+            }
         }
 
         private static void RenamePawns(IReadOnlyList<Pawn> pawns, int limit, Pawn leader, IReadOnlyList<string> army)

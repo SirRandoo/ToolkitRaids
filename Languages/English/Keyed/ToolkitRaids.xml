@@ -22,6 +22,12 @@
     <!-- Letters -->
     <ToolkitRaids.Letters.Title>{0} Raid</ToolkitRaids.Letters.Title>
     <ToolkitRaids.Letters.Text>An army of {0} viewers led by {1} has amassed nearby.</ToolkitRaids.Letters.Text>
+    <ToolkitRaids.Letters.Strategy.Immediate>They're approaching without any delay.</ToolkitRaids.Letters.Strategy.Immediate>
+    <ToolkitRaids.Letters.Strategy.ImmediateSmart>They're approaching without any delay, and they seem to have some understanding of your automated defenses.</ToolkitRaids.Letters.Strategy.ImmediateSmart>
+    <ToolkitRaids.Letters.Strategy.Wait>They seem to be preparing for the upcoming assault.</ToolkitRaids.Letters.Strategy.Wait>
+    <ToolkitRaids.Letters.Strategy.Siege>They've come equipped with siege equipment.</ToolkitRaids.Letters.Strategy.Siege>
+    <ToolkitRaids.Letters.Strategy.Sapper>They've arrived with plans to breach your settlement's walls.</ToolkitRaids.Letters.Strategy.Sapper>
+    <ToolkitRaids.Letters.Strategy.Unknown>Their attack plan could not be deciphered.</ToolkitRaids.Letters.Strategy.Unknown>
     <ToolkitRaids.Letters.FailedSubtext>{0} viewers were lost along the way.</ToolkitRaids.Letters.FailedSubtext>
     
     <!-- Window -->
