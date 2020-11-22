@@ -58,6 +58,7 @@ namespace SirRandoo.ToolkitRaids.Workers
             {
                 var name = leader.Name as NameTriple;
                 leader.Name = new NameTriple(name?.First, tParms.TwitchRaid.Leader, name?.Last);
+                SpecialPawnWorker.ApplyEffectOf(tParms.TwitchRaid.Leader, leader);
             }
             else
             {
@@ -131,6 +132,7 @@ namespace SirRandoo.ToolkitRaids.Workers
 
                 var pName = pawn.Name as NameTriple;
                 pawn.Name = new NameTriple(pName?.First, viewer, pName?.Last);
+                SpecialPawnWorker.ApplyEffectOf(viewer, pawn);
             }
         }
 

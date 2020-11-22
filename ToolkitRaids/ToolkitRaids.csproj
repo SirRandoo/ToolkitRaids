@@ -51,14 +51,19 @@
     <ItemGroup>
         <Compile Include="AddonMenu.cs"/>
         <Compile Include="CommandMethods\JoinRaidCommand.cs"/>
+        <Compile Include="DrugHediffs.cs"/>
         <Compile Include="GameComponentTwitchRaid.cs"/>
         <Compile Include="Helpers\SettingsHelper.cs"/>
+        <Compile Include="Interfaces\IEffectWorker.cs"/>
         <Compile Include="RaidDialog.cs"/>
         <Compile Include="RaidLogger.cs"/>
         <Compile Include="Settings.cs"/>
         <Compile Include="ToolkitRaids.cs"/>
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="TwitchRaidParms.cs"/>
+        <Compile Include="Workers\Effects\DefaultEffect.cs"/>
+        <Compile Include="Workers\Effects\SirRandooEffect.cs"/>
+        <Compile Include="Workers\SpecialPawnWorker.cs"/>
         <Compile Include="Workers\TwitchRaidWorker.cs"/>
     </ItemGroup>
     <ItemGroup>

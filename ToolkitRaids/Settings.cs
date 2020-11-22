@@ -13,6 +13,7 @@ namespace SirRandoo.ToolkitRaids
         public static bool MergeRaids;
         public static bool UseStoryteller;
         public static int Duration = 60;
+        public const float AddictionlessLuciferium = 0.05f;
 
         public static void Draw(Rect canvas)
         {

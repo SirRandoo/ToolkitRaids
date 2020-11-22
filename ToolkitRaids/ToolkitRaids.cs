@@ -1,9 +1,11 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using HarmonyLib;
 using JetBrains.Annotations;
+using RimWorld;
 using ToolkitCore;
 using TwitchLib.Client.Events;
 using UnityEngine;
@@ -14,7 +16,8 @@ namespace SirRandoo.ToolkitRaids
     [UsedImplicitly]
     public class ToolkitRaids : Mod
     {
-        private static readonly List<string> SpecialNames = new List<string> {"sirrandoo", "hodlhodl"};
+        internal static List<string> SpecialNames;
+
         public static readonly ConcurrentQueue<string> RecentRaids = new ConcurrentQueue<string>();
         public static readonly ConcurrentQueue<string> ViewerQueue = new ConcurrentQueue<string>();
 
