@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -9,7 +10,7 @@ namespace SirRandoo.ToolkitRaids.Workers
 {
     public class TwitchRaidWorker : IncidentWorker_RaidEnemy
     {
-        protected override string GetLetterText(IncidentParms parms, List<Pawn> pawns)
+        protected override string GetLetterText([NotNull] IncidentParms parms, List<Pawn> pawns)
         {
             if (parms.faction == Faction.OfMechanoids || parms.faction == Faction.OfInsects)
             {
@@ -88,7 +89,8 @@ namespace SirRandoo.ToolkitRaids.Workers
             return text;
         }
 
-        private static string GetKeyForStrategy(Def strategy)
+        [NotNull]
+        private static string GetKeyForStrategy([NotNull] Def strategy)
         {
             switch (strategy.defName)
             {
@@ -136,6 +138,7 @@ namespace SirRandoo.ToolkitRaids.Workers
             }
         }
 
+        [NotNull]
         private static List<Pawn> GenerateMissingPawns(PawnKindDef kind, Faction faction, int count)
         {
             kind ??= PawnKindDefOf.Colonist;

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -11,7 +11,7 @@
         <AssemblyName>ToolkitRaids</AssemblyName>
         <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
-        <LangVersion>default</LangVersion>
+        <LangVersion>8</LangVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '1.1 release|AnyCPU' ">
         <DebugType>pdbonly</DebugType>
@@ -42,29 +42,41 @@
         <Optimize>true</Optimize>
         <DebugType>pdbonly</DebugType>
     </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '1.3 release|AnyCPU' ">
+      <DefineConstants>TRACE;RW13</DefineConstants>
+      <Optimize>true</Optimize>
+      <DebugType>pdbonly</DebugType>
+      <OutputPath>..\1.3\Assemblies</OutputPath>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '1.3 debug|AnyCPU' ">
+      <DefineConstants>DEBUG;TRACE;RW13</DefineConstants>
+      <DebugSymbols>true</DebugSymbols>
+      <DebugType>full</DebugType>
+      <OutputPath>..\1.3\Assemblies</OutputPath>
+    </PropertyGroup>
     <ItemGroup>
-        <Reference Include="System"/>
-        <Reference Include="System.Core"/>
-        <Reference Include="System.Data"/>
-        <Reference Include="System.Xml"/>
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="AddonMenu.cs"/>
-        <Compile Include="CommandMethods\JoinRaidCommand.cs"/>
-        <Compile Include="DrugHediffs.cs"/>
-        <Compile Include="GameComponentTwitchRaid.cs"/>
-        <Compile Include="Helpers\SettingsHelper.cs"/>
-        <Compile Include="Interfaces\IEffectWorker.cs"/>
-        <Compile Include="RaidDialog.cs"/>
-        <Compile Include="RaidLogger.cs"/>
-        <Compile Include="Settings.cs"/>
-        <Compile Include="ToolkitRaids.cs"/>
-        <Compile Include="Properties\AssemblyInfo.cs"/>
-        <Compile Include="TwitchRaidParms.cs"/>
-        <Compile Include="Workers\Effects\DefaultEffect.cs"/>
-        <Compile Include="Workers\Effects\SirRandooEffect.cs"/>
-        <Compile Include="Workers\SpecialPawnWorker.cs"/>
-        <Compile Include="Workers\TwitchRaidWorker.cs"/>
+        <Compile Include="AddonMenu.cs" />
+        <Compile Include="CommandMethods\JoinRaidCommand.cs" />
+        <Compile Include="DrugHediffs.cs" />
+        <Compile Include="GameComponentTwitchRaid.cs" />
+        <Compile Include="Helpers\SettingsHelper.cs" />
+        <Compile Include="Interfaces\IEffectWorker.cs" />
+        <Compile Include="RaidDialog.cs" />
+        <Compile Include="RaidLogger.cs" />
+        <Compile Include="Settings.cs" />
+        <Compile Include="ToolkitRaids.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="TwitchRaidParms.cs" />
+        <Compile Include="Workers\Effects\DefaultEffect.cs" />
+        <Compile Include="Workers\Effects\SirRandooEffect.cs" />
+        <Compile Include="Workers\SpecialPawnWorker.cs" />
+        <Compile Include="Workers\TwitchRaidWorker.cs" />
     </ItemGroup>
     <ItemGroup>
         <Content Include="..\Common\Defs\Addon.xml">
@@ -88,10 +100,11 @@
         </Content>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="HodlHodl.Rimworld.Toolkit.Core" Version="1.1.5" ExcludeAssets="runtime"/>
-        <PackageReference Include="Krafs.Rimworld.Ref" Version="1.1.2654" Condition="$(DefineConstants.Contains('RW11'))"/>
-        <PackageReference Include="Krafs.Rimworld.Ref" Version="1.2.2753" Condition="$(DefineConstants.Contains('RW12'))"/>
-        <PackageReference Include="Lib.Harmony" Version="2.0.1" ExcludeAssets="runtime"/>
+        <PackageReference Include="HodlHodl.Rimworld.Toolkit.Core" Version="1.1.11" ExcludeAssets="runtime" />
+        <PackageReference Include="Krafs.Rimworld.Ref" Version="1.1.2654" Condition="$(DefineConstants.Contains('RW11'))" />
+        <PackageReference Include="Krafs.Rimworld.Ref" Version="1.2.2753" Condition="$(DefineConstants.Contains('RW12'))" />
+        <PackageReference Include="Krafs.Rimworld.Ref" Version="1.3.3067" Condition="$(DefineConstants.Contains('RW13'))" />
+        <PackageReference Include="Lib.Harmony" Version="2.1.0" ExcludeAssets="runtime" />
     </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

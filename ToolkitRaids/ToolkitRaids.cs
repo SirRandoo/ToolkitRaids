@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using HarmonyLib;
 using JetBrains.Annotations;
-using RimWorld;
 using ToolkitCore;
 using TwitchLib.Client.Events;
 using UnityEngine;
@@ -33,12 +31,13 @@ namespace SirRandoo.ToolkitRaids
             Settings.Draw(inRect);
         }
 
+        [NotNull]
         public override string SettingsCategory()
         {
             return nameof(ToolkitRaids);
         }
 
-        internal static void OnRaidNotification(object sender, OnRaidNotificationArgs args)
+        internal static void OnRaidNotification(object sender, [NotNull] OnRaidNotificationArgs args)
         {
             RecentRaids.Enqueue(args.RaidNotification.Login);
         }
@@ -46,8 +45,8 @@ namespace SirRandoo.ToolkitRaids
         internal static string GenerateNameForRaid()
         {
             return UnityData.IsInMainThread && Rand.Chance(0.05f)
-                    ? SpecialNames.RandomElement()
-                    : Path.GetRandomFileName().Replace(".", "").Substring(0, 8);
+                ? SpecialNames.RandomElement()
+                : Path.GetRandomFileName().Replace(".", "").Substring(0, 8);
         }
     }
 

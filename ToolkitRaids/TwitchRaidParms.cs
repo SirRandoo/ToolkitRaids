@@ -1,11 +1,12 @@
-﻿using RimWorld;
+﻿using JetBrains.Annotations;
+using RimWorld;
 using Verse;
 
 namespace SirRandoo.ToolkitRaids
 {
     public class TwitchRaidParms : IncidentParms
     {
-        public TwitchRaidParms(IncidentParms parms)
+        public TwitchRaidParms([NotNull] IncidentParms parms)
         {
             target = parms.target;
             points = parms.points;
@@ -41,6 +42,7 @@ namespace SirRandoo.ToolkitRaids
 
         public Raid TwitchRaid { get; set; }
 
+        [NotNull]
         public static TwitchRaidParms ForRaid(Raid raid, Map map)
         {
             return new TwitchRaidParms(StorytellerUtility.DefaultParmsNow(IncidentCategoryDefOf.ThreatBig, map))

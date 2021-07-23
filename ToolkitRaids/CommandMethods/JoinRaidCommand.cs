@@ -22,7 +22,7 @@ namespace SirRandoo.ToolkitRaids.CommandMethods
             return Current.Game != null;
         }
 
-        public override void Execute(ITwitchCommand twitchCommand)
+        public override void Execute([NotNull] ITwitchCommand twitchCommand)
         {
             ToolkitRaids.ViewerQueue.Enqueue(twitchCommand.Username);
         }

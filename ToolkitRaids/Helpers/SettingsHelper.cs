@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 using UnityEngine;
 using Verse;
 
@@ -6,6 +7,7 @@ namespace SirRandoo.ToolkitRaids.Helpers
 {
     internal static class SettingsHelper
     {
+        [NotNull]
         public static Tuple<Rect, Rect> ToForm(this Rect region, float factor = 0.8f)
         {
             var left = new Rect(region.x, region.y, region.width * factor - 2f, region.height);
@@ -26,12 +28,13 @@ namespace SirRandoo.ToolkitRaids.Helpers
             return new Rect(region.x, region.y, width, region.height);
         }
 
-        public static Tuple<Rect, Rect> GetRectAsForm(this Listing listing, float factor = 0.8f)
+        [NotNull]
+        public static Tuple<Rect, Rect> GetRectAsForm([NotNull] this Listing listing, float factor = 0.8f)
         {
             return listing.GetRect(Text.LineHeight).ToForm(factor);
         }
 
-        public static void DrawDescription(this Listing listing, string description, Color color)
+        public static void DrawDescription([NotNull] this Listing listing, string description, Color color)
         {
             GameFont fontCache = Text.Font;
             GUI.color = color;
@@ -49,7 +52,7 @@ namespace SirRandoo.ToolkitRaids.Helpers
             listing.Gap(6f);
         }
 
-        public static void DrawDescription(this Listing listing, string description)
+        public static void DrawDescription([NotNull] this Listing listing, string description)
         {
             DrawDescription(listing, description, new Color(0.72f, 0.72f, 0.72f));
         }

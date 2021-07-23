@@ -89,8 +89,8 @@ namespace SirRandoo.ToolkitRaids
                 _component.AllRaidsForReading.Count * (Text.SmallFontHeight * 3f)
             );
 
-            listing.Begin(contentRect);
-            listing.BeginScrollView(contentRect, ref _scrollPos, ref viewPort);
+            Widgets.BeginScrollView(contentRect, ref _scrollPos, viewPort);
+            listing.Begin(viewPort);
 
             for (var index = 0; index < _component.AllRaidsForReading.Count; index++)
             {
@@ -116,7 +116,7 @@ namespace SirRandoo.ToolkitRaids
             }
 
             listing.End();
-            listing.EndScrollView(ref viewPort);
+            Widgets.EndScrollView();
 
             var footerRect = new Rect(0f, inRect.height - Text.LineHeight, inRect.width, Text.LineHeight);
 

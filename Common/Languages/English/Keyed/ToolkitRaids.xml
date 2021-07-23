@@ -6,6 +6,7 @@
     <ToolkitRaids.AddonMenu.ForceNoRegister>Close raid signup</ToolkitRaids.AddonMenu.ForceNoRegister>
     <ToolkitRaids.AddonMenu.ForceNewRaid>Generate new raid</ToolkitRaids.AddonMenu.ForceNewRaid>
     <ToolkitRaids.AddonMenu.ForceNewRaidLarge>Generate new large raid</ToolkitRaids.AddonMenu.ForceNewRaidLarge>
+    <ToolkitRaids.AddonMenu.ExecuteLastRaid>Revive last raid</ToolkitRaids.AddonMenu.ExecuteLastRaid>
     
     <!-- Settings -->
     <ToolkitRaids.MergeRaids.Label>Merge Twitch raids into one.</ToolkitRaids.MergeRaids.Label>

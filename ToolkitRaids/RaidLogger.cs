@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 using UnityEngine;
 using Verse;
 
@@ -16,7 +17,7 @@ namespace SirRandoo.ToolkitRaids
             }
         }
 
-        public static void Error(string message, Exception exception)
+        public static void Error(string message, [NotNull] Exception exception)
         {
             Verse.Log.Error($"{message}: {exception.GetType().Name}({exception.Message})\n{exception.StackTrace}");
         }
@@ -26,7 +27,7 @@ namespace SirRandoo.ToolkitRaids
             Log("INFO", message);
         }
 
-        private static void Log(string level, string message, string color = null)
+        private static void Log([NotNull] string level, string message, [CanBeNull] string color = null)
         {
             Verse.Log.Message(
                 color.NullOrEmpty()

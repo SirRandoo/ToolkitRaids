@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 using ToolkitCore.Interfaces;
 using ToolkitCore.Windows;
 using Verse;
@@ -7,6 +8,7 @@ namespace SirRandoo.ToolkitRaids
 {
     public class AddonMenu : IAddonMenu
     {
+        [NotNull]
         public List<FloatMenuOption> MenuOptions()
         {
             return new List<FloatMenuOption>
@@ -54,6 +56,14 @@ namespace SirRandoo.ToolkitRaids
                         }
 
                         component.RegisterRaid(raid);
+                    }
+                ),
+                new FloatMenuOption(
+                    "ToolkitRaids.AddonMenu.ExecuteLastRaid".TranslateSimple(),
+                    () =>
+                    {
+                        RaidLogger.Info("Reviving last raid...");
+                        Current.Game.GetComponent<GameComponentTwitchRaid>()?.RunLastRaid();
                     }
                 )
             };

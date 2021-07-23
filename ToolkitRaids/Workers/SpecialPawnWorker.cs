@@ -23,12 +23,12 @@ namespace SirRandoo.ToolkitRaids.Workers
             ToolkitRaids.SpecialNames = SpecialEffects.Keys.ToList();
         }
 
-        private static bool IsSpecialPawn(string name)
+        private static bool IsSpecialPawn([NotNull] string name)
         {
             return ToolkitRaids.SpecialNames.Contains(name.ToLowerInvariant());
         }
 
-        public static void ApplyEffectOf(string name, Pawn pawn)
+        public static void ApplyEffectOf([NotNull] string name, Pawn pawn)
         {
             if (!IsSpecialPawn(name))
             {

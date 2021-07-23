@@ -123,11 +123,12 @@ namespace SirRandoo.ToolkitRaids
     public class GameComponentTwitchRaid : GameComponent
     {
         private int _marker;
+        private Raid _lastRaid;
         private List<Raid> _raids = new List<Raid>();
 
         public GameComponentTwitchRaid(Game game) { }
 
-        public List<Raid> AllRaidsForReading => _raids.ToList();
+        [NotNull] public List<Raid> AllRaidsForReading => _raids.ToList();
 
         public override void GameComponentTick()
         {
@@ -152,6 +153,7 @@ namespace SirRandoo.ToolkitRaids
                 raid.Tick();
             }
 
+            _lastRaid = _raids.LastOrDefault(r => r.Timer <= 0);
             _raids.RemoveAll(r => r.Timer <= 0);
         }
 
@@ -247,6 +249,16 @@ namespace SirRandoo.ToolkitRaids
         public void RegisterRaid(Raid raid)
         {
             _raids.Add(raid);
+        }
+
+        public void RunLastRaid()
+        {
+            if (_lastRaid == null)
+            {
+                return;
+            }
+
+            RegisterRaid(_lastRaid);
         }
 
         public override void ExposeData()
