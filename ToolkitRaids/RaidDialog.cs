@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using SirRandoo.ToolkitRaids.Models;
+using UnityEngine;
 using Verse;
 
 namespace SirRandoo.ToolkitRaids

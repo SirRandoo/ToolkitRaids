@@ -67,6 +67,8 @@
         <Compile Include="GameComponentTwitchRaid.cs" />
         <Compile Include="Helpers\SettingsHelper.cs" />
         <Compile Include="Interfaces\IEffectWorker.cs" />
+        <Compile Include="Models\Raid.cs" />
+        <Compile Include="Models\RaidLeader.cs" />
         <Compile Include="RaidDialog.cs" />
         <Compile Include="RaidLogger.cs" />
         <Compile Include="Settings.cs" />

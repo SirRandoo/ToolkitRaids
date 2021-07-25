@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using RimWorld;
+using SirRandoo.ToolkitRaids.Models;
 using Verse;
 
 namespace SirRandoo.ToolkitRaids

@@ -13,6 +13,9 @@ namespace SirRandoo.ToolkitRaids
         public static bool MergeRaids;
         public static bool UseStoryteller;
         public static int Duration = 60;
+        public static bool SendMessage;
+        public static string MessageToSend = "!so %raider%";
+        public static int MinimumRaiders = 2;
         public const float AddictionlessLuciferium = 0.05f;
 
         public static void Draw(Rect canvas)
@@ -25,14 +28,48 @@ namespace SirRandoo.ToolkitRaids
             listing.DrawDescription("ToolkitRaids.MergeRaids.Description".TranslateSimple());
             listing.CheckboxLabeled("ToolkitRaids.StorytellerRaid.Label".TranslateSimple(), ref UseStoryteller);
             listing.DrawDescription("ToolkitRaids.StorytellerRaid.Description".TranslateSimple());
-            
+
+            (Rect sendMsgLabel, Rect sendMsgField) = listing.GetRectAsForm();
+            var sendMsgCheck = new Rect(
+                sendMsgField.x + sendMsgField.width - sendMsgField.height,
+                sendMsgField.y,
+                sendMsgField.height,
+                sendMsgField.height
+            );
+
+            if (SendMessage)
+            {
+                sendMsgLabel = sendMsgLabel.WithWidth(sendMsgLabel.width - sendMsgLabel.height);
+                sendMsgCheck = new Rect(
+                    sendMsgLabel.x + sendMsgLabel.width,
+                    sendMsgLabel.y,
+                    sendMsgLabel.height,
+                    sendMsgLabel.height
+                );
+            }
+
+            Widgets.Checkbox(sendMsgCheck.x, sendMsgCheck.y, ref SendMessage, sendMsgLabel.height);
+            SettingsHelper.DrawLabel(sendMsgLabel, "ToolkitRaids.RaidMessage.Label".TranslateSimple());
+            listing.DrawDescription("ToolkitRaids.RaidMessage.Description".TranslateSimple());
+
+            if (SendMessage)
+            {
+                MessageToSend = Widgets.TextField(sendMsgField, MessageToSend);
+            }
+
             (Rect timeLabel, Rect timeField) = listing.GetRectAsForm();
             var durationBuffer = Duration.ToString();
 
-            Widgets.Label(timeLabel, "ToolkitRaids.Duration.Label".TranslateSimple());
+            SettingsHelper.DrawLabel(timeLabel, "ToolkitRaids.Duration.Label".TranslateSimple());
             Widgets.TextFieldNumeric(timeField, ref Duration, ref durationBuffer, 30, 600);
-            Widgets.DrawHighlightIfMouseover(timeLabel);
             listing.DrawDescription("ToolkitRaids.Duration.Description".TranslateSimple());
+
+            (Rect minLabel, Rect minField) = listing.GetRectAsForm();
+            var minBuffer = MinimumRaiders.ToString();
+
+            SettingsHelper.DrawLabel(minLabel, "ToolkitRaids.MinimumRaiders.Label".TranslateSimple());
+            Widgets.TextFieldNumeric(minField, ref MinimumRaiders, ref minBuffer);
+            listing.DrawDescription("ToolkitRaids.MinimumRaiders.Description".TranslateSimple());
 
             if (UseStoryteller)
             {
@@ -50,7 +87,6 @@ namespace SirRandoo.ToolkitRaids
 
             Widgets.Label(personLabel, "ToolkitRaids.PersonPoints.Label".TranslateSimple());
             Widgets.TextFieldNumeric(personField, ref PointsPerPerson, ref personBuffer, 1f);
-            Widgets.DrawHighlightIfMouseover(personLabel);
             listing.DrawDescription("ToolkitRaids.PersonPoints.Description".TranslateSimple());
 
             (Rect maxLabel, Rect maxField) = listing.GetRectAsForm();
@@ -58,7 +94,6 @@ namespace SirRandoo.ToolkitRaids
 
             Widgets.Label(maxLabel, "ToolkitRaids.MaxPoints.Label".TranslateSimple());
             Widgets.TextFieldNumeric(maxField, ref MaximumAllowedPoints, ref maxBuffer, PointsPerPerson);
-            Widgets.DrawHighlightIfMouseover(maxLabel);
             listing.DrawDescription("ToolkitRaids.MaxPoints.Description".TranslateSimple());
 
             listing.End();
@@ -71,6 +106,9 @@ namespace SirRandoo.ToolkitRaids
             Scribe_Values.Look(ref MaximumAllowedPoints, "maxPoints", 20000f);
             Scribe_Values.Look(ref UseStoryteller, "storyteller");
             Scribe_Values.Look(ref PointsPerPerson, "pointsPerPerson", 50f);
+            Scribe_Values.Look(ref SendMessage, "sendMessage");
+            Scribe_Values.Look(ref MessageToSend, "messageToSend", "!so %raider%");
+            Scribe_Values.Look(ref MinimumRaiders, "minimumRaiders", 2);
         }
     }
 }

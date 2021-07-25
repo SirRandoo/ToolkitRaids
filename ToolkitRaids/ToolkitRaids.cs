@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using HarmonyLib;
 using JetBrains.Annotations;
+using SirRandoo.ToolkitRaids.Models;
 using ToolkitCore;
 using TwitchLib.Client.Events;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace SirRandoo.ToolkitRaids
     {
         internal static List<string> SpecialNames;
 
-        public static readonly ConcurrentQueue<string> RecentRaids = new ConcurrentQueue<string>();
+        public static readonly ConcurrentQueue<RaidLeader> RecentRaids = new ConcurrentQueue<RaidLeader>();
         public static readonly ConcurrentQueue<string> ViewerQueue = new ConcurrentQueue<string>();
 
         public ToolkitRaids(ModContentPack content) : base(content)
@@ -39,7 +40,19 @@ namespace SirRandoo.ToolkitRaids
 
         internal static void OnRaidNotification(object sender, [NotNull] OnRaidNotificationArgs args)
         {
-            RecentRaids.Enqueue(args.RaidNotification.Login);
+            var leader = new RaidLeader {Username = args.RaidNotification.Login};
+
+            if (!int.TryParse(args.RaidNotification.MsgParamViewerCount, out int count))
+            {
+                RaidLogger.Warn(
+                    $"Could not parse viewer count of {args.RaidNotification.MsgParamViewerCount}. Defaulted to 1"
+                );
+                count = 1;
+            }
+
+            leader.ViewerCount = count;
+
+            RecentRaids.Enqueue(leader);
         }
 
         internal static string GenerateNameForRaid()

@@ -13,13 +13,17 @@
     <ToolkitRaids.MergeRaids.Description>When enabled, the mod will merge all raids into one singular one. This singular raid will be the oldest active raid that's accepting viewers via !joinraid.</ToolkitRaids.MergeRaids.Description>
     <ToolkitRaids.StorytellerRaid.Label>Generate a default storyteller raid.</ToolkitRaids.StorytellerRaid.Label>
     <ToolkitRaids.StorytellerRaid.Description>When enabled, the mod will generate a standard raid based on the parameters the storyteller returns. The parameters will be based off a standard big threat raid on any player owned map. Disabling this expose more advanced settings that'll allow you to fine tune some of the point calculations the mod will do.</ToolkitRaids.StorytellerRaid.Description>
+    <ToolkitRaids.MinimumRaiders.Label>The minimum size a raid must be before the mod will trigger a raid event.</ToolkitRaids.MinimumRaiders.Label>
+    <ToolkitRaids.MinimumRaiders.Description>The minimum amount of viewers a Twitch raid has to have before the mod will trigger a raid event. While you can set this value to whatever you want, it's advised to keep it within an reasonable minimum.</ToolkitRaids.MinimumRaiders.Description>
+    <ToolkitRaids.RaidMessage.Label>Send a message when a raid happens</ToolkitRaids.RaidMessage.Label>
+    <ToolkitRaids.RaidMessage.Description>Whether or not the mod will send a message to when your channel is raided. Disabling this setting or leaving the text box empty will disable this feature. Valid placeholders you can use are:\n%raider% - the channel that raided you\n%viewers% - the amount of viewers in the raid</ToolkitRaids.RaidMessage.Description>
     <ToolkitRaids.Duration.Label>How long do viewers have, in seconds, to join the raid.</ToolkitRaids.Duration.Label>
     <ToolkitRaids.Duration.Description>The amount of time, in seconds, viewers will have to join the raid event by typing !joinraid in chat. Changing this value only affects raids received after the change.</ToolkitRaids.Duration.Description>
     <ToolkitRaids.MaxPoints.Label>How high should Twitch raids scale point wise?</ToolkitRaids.MaxPoints.Label>
     <ToolkitRaids.MaxPoints.Description>The maximum amount of points a raid is permitted to be. While you can set this higher than normally permitted by RimWorld, the game may still adjust the maximum points to a lower value.</ToolkitRaids.MaxPoints.Description>
     <ToolkitRaids.PersonPoints.Label>The number of points a person will add to the raid's points.</ToolkitRaids.PersonPoints.Label>
     <ToolkitRaids.PersonPoints.Description>The amount of points a single raider, including the raid leader, is valued at. The final calculated value will then be adjusted to be on par with a standard storyteller raid.</ToolkitRaids.PersonPoints.Description>
-    
+
     <!-- Letters -->
     <ToolkitRaids.Letters.Title>{0} Raid</ToolkitRaids.Letters.Title>
     <ToolkitRaids.Letters.Text>An army of {0} viewers led by {1} has amassed nearby.</ToolkitRaids.Letters.Text>

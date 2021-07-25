@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
+using SirRandoo.ToolkitRaids.Models;
 using ToolkitCore.Interfaces;
 using ToolkitCore.Windows;
 using Verse;
@@ -31,7 +32,12 @@ namespace SirRandoo.ToolkitRaids
                     {
                         string result = ToolkitRaids.GenerateNameForRaid();
 
-                        ToolkitRaids.RecentRaids.Enqueue(result);
+                        ToolkitRaids.RecentRaids.Enqueue(
+                            new RaidLeader
+                            {
+                                Username = result, ViewerCount = Settings.MinimumRaiders + 1, Generated = true
+                            }
+                        );
                         RaidLogger.Info($@"Scheduled a new raid with leader ""{result}"".");
                     }
                 ),
