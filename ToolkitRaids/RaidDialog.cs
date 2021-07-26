@@ -1,4 +1,6 @@
-﻿using SirRandoo.ToolkitRaids.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using SirRandoo.ToolkitRaids.Models;
 using UnityEngine;
 using Verse;
 
@@ -78,6 +80,7 @@ namespace SirRandoo.ToolkitRaids
 
         public override void DoWindowContents(Rect inRect)
         {
+            List<Raid> raids = _component.AllActiveRaids.ToList();
             GUI.BeginGroup(inRect);
             GameFont cache = Text.Font;
             var listing = new Listing_Standard(GameFont.Small);
@@ -87,15 +90,15 @@ namespace SirRandoo.ToolkitRaids
                 0f,
                 0f,
                 inRect.width - 16f,
-                _component.AllRaidsForReading.Count * (Text.SmallFontHeight * 3f)
+                raids.Count * (Text.SmallFontHeight * 3f)
             );
 
             Widgets.BeginScrollView(contentRect, ref _scrollPos, viewPort);
             listing.Begin(viewPort);
 
-            for (var index = 0; index < _component.AllRaidsForReading.Count; index++)
+            for (var index = 0; index < raids.Count; index++)
             {
-                Raid raid = _component.AllRaidsForReading[index];
+                Raid raid = raids[index];
                 Rect line = listing.GetRect(Text.LineHeight * 3f);
                 var leaderRect = new Rect(0f, line.y, line.width, Text.LineHeight);
                 var armyRect = new Rect(0f, line.y + Text.LineHeight, line.width, Text.LineHeight);
@@ -131,7 +134,7 @@ namespace SirRandoo.ToolkitRaids
 
         public override void WindowUpdate()
         {
-            if (Time.time % 2 < 1 && !_component.AllRaidsForReading.Any())
+            if (Time.time % 2 < 1 && !_component.AllActiveRaids.Any())
             {
                 Close(false);
             }

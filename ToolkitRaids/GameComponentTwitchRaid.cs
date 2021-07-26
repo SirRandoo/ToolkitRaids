@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using SirRandoo.ToolkitRaids.Models;
@@ -11,20 +12,21 @@ namespace SirRandoo.ToolkitRaids
     [UsedImplicitly]
     public class GameComponentTwitchRaid : GameComponent
     {
-        private float _marker;
         private Raid _lastRaid;
+        private float _marker;
         private List<Raid> _raids = new List<Raid>();
 
         public GameComponentTwitchRaid(Game game) { }
 
         [NotNull] public List<Raid> AllRaidsForReading => _raids.ToList();
+        [NotNull] public IEnumerable<Raid> AllActiveRaids => _raids.Where(r => r.Timer > 0);
 
         public override void GameComponentUpdate()
         {
             ProcessRaidQueue();
             ProcessViewerQueue();
 
-            if (_raids.Count > 0 && !Find.WindowStack.IsOpen(typeof(RaidDialog)))
+            if (AllActiveRaids.Any() && !Find.WindowStack.IsOpen(typeof(RaidDialog)))
             {
                 Find.WindowStack.Add(new RaidDialog());
             }
@@ -38,13 +40,23 @@ namespace SirRandoo.ToolkitRaids
             {
                 raid.Timer -= Time.unscaledTime - _marker;
 
-                if (raid.Timer <= 0)
+                if (raid.Timer > 0)
                 {
+                    continue;
+                }
+
+                try
+                {
+                    _lastRaid = raid;
                     raid.Spawn();
+                }
+                catch (Exception e)
+                {
+                    RaidLogger.Error("Could not spawn raid", e);
                 }
             }
 
-            _lastRaid = _raids.LastOrDefault(r => r.Timer <= 0);
+            _marker = Time.unscaledTime;
             _raids.RemoveAll(r => r.Timer <= 0);
         }
 
@@ -70,7 +82,7 @@ namespace SirRandoo.ToolkitRaids
                     break;
                 }
 
-                if (result.ViewerCount < Settings.MinimumRaiders)
+                if (result.ViewerCount < Settings.MinimumRaiders && !result.Generated)
                 {
                     continue;
                 }
@@ -109,7 +121,7 @@ namespace SirRandoo.ToolkitRaids
 
                 if (existing == null)
                 {
-                    _raids.Add(new Raid(result.Username) {Timer = Settings.Duration});
+                    _raids.Add(new Raid {Leader = result.Username, Timer = Settings.Duration});
                 }
                 else
                 {
@@ -124,7 +136,7 @@ namespace SirRandoo.ToolkitRaids
                     return;
                 }
 
-                _raids.Add(new Raid(result.Username) {Timer = Settings.Duration});
+                _raids.Add(new Raid {Leader = result.Username, Timer = Settings.Duration});
             }
 
             if (Settings.SendMessage && !Settings.MessageToSend.NullOrEmpty() && !result.Generated)
@@ -167,7 +179,8 @@ namespace SirRandoo.ToolkitRaids
 
         public override void ExposeData()
         {
-            Scribe_Collections.Look(ref _raids, "pendingRaids", LookMode.Value);
+            Scribe_Deep.Look(ref _lastRaid, "lastRaid");
+            Scribe_Collections.Look(ref _raids, "pendingRaids", LookMode.Deep);
         }
     }
 }

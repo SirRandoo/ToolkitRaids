@@ -54,7 +54,7 @@ namespace SirRandoo.ToolkitRaids
                             return;
                         }
 
-                        var raid = new Raid(ToolkitRaids.GenerateNameForRaid());
+                        var raid = new Raid {Leader = ToolkitRaids.GenerateNameForRaid()};
 
                         for (var index = 0; index < Rand.Range(20, 50); index++)
                         {

@@ -23,6 +23,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using RimWorld;
 using SirRandoo.ToolkitRaids.Workers;
 using UnityEngine;
@@ -37,19 +38,14 @@ namespace SirRandoo.ToolkitRaids.Models
         public string Leader;
         public float Timer;
 
-        public Raid(string leader)
-        {
-            Leader = leader;
-        }
-
         public string ArmyCountLabel { get; private set; } = "0";
 
         public int TotalTroops => Army.Count + 1;
 
         public void ExposeData()
         {
-            Scribe_Deep.Look(ref Timer, "timer");
-            Scribe_Deep.Look(ref Leader, "leader");
+            Scribe_Values.Look(ref Timer, "timer");
+            Scribe_Values.Look(ref Leader, "leader");
             Scribe_Collections.Look(ref Army, "army", LookMode.Value);
         }
 
