@@ -24,7 +24,7 @@ namespace SirRandoo.ToolkitRaids
             dontUseSingleUseRocketLaunchers = parms.dontUseSingleUseRocketLaunchers;
             raidStrategy = parms.raidStrategy;
             raidArrivalMode = parms.raidArrivalMode;
-            raidForceOneIncap = parms.raidForceOneIncap;
+            raidForceOneDowned = parms.raidForceOneDowned;
             raidNeverFleeIndividual = parms.raidNeverFleeIndividual;
             raidArrivalModeForQuickMilitaryAid = parms.raidArrivalModeForQuickMilitaryAid;
             biocodeApparelChance = parms.biocodeApparelChance;
