@@ -1,44 +1,37 @@
 ﻿using System;
-using JetBrains.Annotations;
-using UnityEngine;
 using Verse;
 
-namespace SirRandoo.ToolkitRaids
+namespace SirRandoo.ToolkitRaids;
+
+internal static class RaidLogger
 {
-    public static class RaidLogger
+    public static void Debug(string message)
     {
-        public static void Debug(string message)
+        if (Prefs.DevMode)
         {
-            if (Prefs.DevMode)
-            {
-            #if DEBUG
+        #if DEBUG
                 Log("DEBUG", message, $"#{ColorUtility.ToHtmlStringRGB(ColorLibrary.HotPink)}");
-            #endif
-            }
+        #endif
         }
+    }
 
-        public static void Error(string message, [NotNull] Exception exception)
-        {
-            Verse.Log.Error($"{message}: {exception.GetType().Name}({exception.Message})\n{exception.StackTrace}");
-        }
+    public static void Error(string message, Exception exception)
+    {
+        Verse.Log.Error($"{message}: {exception.GetType().Name}({exception.Message})\n{exception.StackTrace}");
+    }
 
-        public static void Info(string message)
-        {
-            Log("INFO", message);
-        }
+    public static void Info(string message)
+    {
+        Log("INFO", message);
+    }
 
-        private static void Log([NotNull] string level, string message, [CanBeNull] string color = null)
-        {
-            Verse.Log.Message(
-                color.NullOrEmpty()
-                    ? $"{level.ToUpper()} ToolkitRaids :: {message}"
-                    : $"<color=\"{color}\">{level.ToUpper()} ToolkitRaids :: {message}</color>"
-            );
-        }
+    private static void Log(string level, string message, string? color = null)
+    {
+        Verse.Log.Message(color.NullOrEmpty() ? $"{level.ToUpper()} ToolkitRaids :: {message}" : $"<color=\"{color}\">{level.ToUpper()} ToolkitRaids :: {message}</color>");
+    }
 
-        public static void Warn(string message)
-        {
-            Log("WARN", message, "#ff8080");
-        }
+    public static void Warn(string message)
+    {
+        Log("WARN", message, "#ff8080");
     }
 }

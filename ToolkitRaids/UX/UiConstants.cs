@@ -1,6 +1,6 @@
 ﻿// MIT License
 //
-// Copyright (c) 2021 SirRandoo
+// Copyright (c) 2024 SirRandoo
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,11 +20,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-namespace SirRandoo.ToolkitRaids.Models;
+namespace SirRandoo.ToolkitRaids.UX;
 
-public sealed class RaidLeader
+/// <summary>
+///     A set of constants that are used throughout the mod's menus.
+/// </summary>
+public static class UiConstants
 {
-    internal bool Generated { get; init; }
-    public int ViewerCount { get; set; }
-    public required string Username { get; init; }
+    /// <summary>
+    ///     The line height of all content within the mod's menus.
+    /// </summary>
+    /// <remarks>
+    ///     The mod intentionally uses a slightly higher line height than RimWorld's to create less
+    ///     visually dense menus as they will often contain a lot of information that needs to be digested.
+    /// </remarks>
+    public const float LineHeight = 28f;
+
+    /// <summary>
+    ///     The line height of all tabs within the mod's menus.
+    /// </summary>
+    public const float TabHeight = 35f;
 }

@@ -23,106 +23,110 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 using RimWorld;
 using SirRandoo.ToolkitRaids.Workers;
 using UnityEngine;
 using Verse;
 using Random = UnityEngine.Random;
 
-namespace SirRandoo.ToolkitRaids.Models
+namespace SirRandoo.ToolkitRaids.Models;
+
+public class Raid : IExposable
 {
-    public class Raid : IExposable
+    private List<string> _army = [];
+    private string _leader = null!;
+    private float _timer;
+
+    public string ArmyCountLabel { get; private set; } = "0";
+
+    public int TotalTroops => _army.Count + 1;
+
+    public string Leader
     {
-        public List<string> Army = new List<string>();
-        public string Leader;
-        public float Timer;
+        get => _leader;
+        set => _leader = value;
+    }
 
-        public string ArmyCountLabel { get; private set; } = "0";
+    public float Timer
+    {
+        get => _timer;
+        set => _timer = value;
+    }
 
-        public int TotalTroops => Army.Count + 1;
+    public List<string> Army
+    {
+        get => _army;
+        set => _army = value;
+    }
 
-        public void ExposeData()
+    public void ExposeData()
+    {
+        Scribe_Values.Look(ref _timer, "timer");
+        Scribe_Values.Look(ref _leader!, "leader");
+        Scribe_Collections.Look(ref _army, "army", LookMode.Value);
+    }
+
+    public void Recruit(string viewer)
+    {
+        _army.Add(viewer);
+        ArmyCountLabel = _army.Count.ToString("N0");
+    }
+
+    public void Unrecruit(string viewer)
+    {
+        _army.RemoveAll(v => v.EqualsIgnoreCase(viewer));
+        ArmyCountLabel = _army.Count.ToString("N0");
+    }
+
+    internal void Spawn()
+    {
+        Map? map = Current.Game.Maps.Where(m => m.IsPlayerHome).RandomElementWithFallback();
+
+        if (map == null)
         {
-            Scribe_Values.Look(ref Timer, "timer");
-            Scribe_Values.Look(ref Leader, "leader");
-            Scribe_Collections.Look(ref Army, "army", LookMode.Value);
+            return;
         }
 
-        public void Recruit(string viewer)
+        TwitchRaidParams defaultParams = TwitchRaidParams.ForRaid(this, map);
+
+        if (!RaidMod.Instance.Settings.UseStoryteller)
         {
-            Army.Add(viewer);
-            ArmyCountLabel = Army.Count.ToString("N0");
+            float tellerPoints = defaultParams.points;
+            float twitchPoints = RaidMod.Instance.Settings.PointsPerPerson * (_army.Count + 1);
+            float diff = tellerPoints - twitchPoints;
+            float finalPoints = twitchPoints;
+
+            if (diff > tellerPoints * 0.95f)
+            {
+                RaidLogger.Debug("Point differential too high!");
+
+                float factor = Mathf.Clamp(Mathf.Round((_army.Count + 1f) / 10f), 10f, 100f) + Random.Range(0.75f, 1.5f);
+                finalPoints = Mathf.Clamp(twitchPoints * (diff / tellerPoints * factor), twitchPoints, RaidMod.Instance.Settings.MaximumAllowedPoints);
+
+                RaidLogger.Warn($"Adjusted the raid's points from {twitchPoints:N2} to {finalPoints:N2} (Storyteller points: {tellerPoints:N2})");
+            }
+
+            RaidLogger.Debug($"Teller points: {tellerPoints:N4}");
+            RaidLogger.Debug($"ToolkitRaid points: {twitchPoints:N4}");
+            RaidLogger.Debug($"Differential: {diff:N4}");
+            RaidLogger.Debug($"Final points: {finalPoints:N4}");
+            defaultParams.points = finalPoints;
         }
 
-        public void Unrecruit(string viewer)
+        defaultParams.customLetterLabel = "ToolkitRaids.Letters.Title".Translate(_leader.CapitalizeFirst());
+        defaultParams.forced = true;
+        defaultParams.raidNeverFleeIndividual = true;
+        defaultParams.pawnCount = _army.Count + 1;
+
+        var worker = new TwitchRaidWorker { def = IncidentDefOf.RaidEnemy };
+
+        try
         {
-            Army.RemoveAll(v => v.EqualsIgnoreCase(viewer));
-            ArmyCountLabel = Army.Count.ToString("N0");
+            worker.TryExecute(defaultParams);
         }
-
-        internal void Spawn()
+        catch (Exception e)
         {
-            Map map = Current.Game.Maps.Where(m => m.IsPlayerHome).RandomElementWithFallback();
-
-            if (map == null)
-            {
-                return;
-            }
-
-            TwitchRaidParms defaultParms = TwitchRaidParms.ForRaid(this, map);
-
-            if (!Settings.UseStoryteller)
-            {
-                float tellerPoints = defaultParms.points;
-                float twitchPoints = Settings.PointsPerPerson * (Army.Count + 1);
-                float diff = tellerPoints - twitchPoints;
-                float finalPoints = twitchPoints;
-
-                if (diff > tellerPoints * 0.95f)
-                {
-                    RaidLogger.Debug("Point differential too high!");
-
-                    float factor = Mathf.Clamp(Mathf.Round((Army.Count + 1f) / 10f), 10f, 100f)
-                                   + Random.Range(0.75f, 1.5f);
-                    finalPoints = Mathf.Clamp(
-                        twitchPoints * (diff / tellerPoints * factor),
-                        twitchPoints,
-                        Settings.MaximumAllowedPoints
-                    );
-
-                    RaidLogger.Warn(
-                        $"Adjusted the raid's points from {twitchPoints:N2} to {finalPoints:N2} (Storyteller points: {tellerPoints:N2})"
-                    );
-                }
-
-                RaidLogger.Debug($"Teller points: {tellerPoints:N4}");
-                RaidLogger.Debug($"ToolkitRaid points: {twitchPoints:N4}");
-                RaidLogger.Debug($"Differential: {diff:N4}");
-                RaidLogger.Debug($"Final points: {finalPoints:N4}");
-                defaultParms.points = finalPoints;
-            }
-
-            defaultParms.TwitchRaid = this;
-            defaultParms.customLetterLabel = "ToolkitRaids.Letters.Title".Translate(Leader.CapitalizeFirst());
-            defaultParms.forced = true;
-            defaultParms.raidNeverFleeIndividual = true;
-            defaultParms.pawnCount = Army.Count + 1;
-            defaultParms.faction = Find.FactionManager.AllFactionsVisibleInViewOrder.Where(f => !f.IsPlayer)
-               .Where(f => f.PlayerRelationKind == FactionRelationKind.Hostile)
-               .Where(f => f.def.humanlikeFaction)
-               .RandomElementWithFallback(defaultParms.faction);
-
-            var worker = new TwitchRaidWorker {def = IncidentDefOf.RaidEnemy};
-
-            try
-            {
-                worker.TryExecute(defaultParms);
-            }
-            catch (Exception e)
-            {
-                RaidLogger.Error("Could not execute raid worker", e);
-            }
+            RaidLogger.Error("Could not execute raid worker", e);
         }
     }
 }

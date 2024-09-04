@@ -1,6 +1,6 @@
 ﻿// MIT License
 //
-// Copyright (c) 2021 SirRandoo
+// Copyright (c) 2024 SirRandoo
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,11 +20,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-namespace SirRandoo.ToolkitRaids.Models;
+using UnityEngine;
+using Verse;
 
-public sealed class RaidLeader
+namespace SirRandoo.ToolkitRaids.UX;
+
+public static class CheckboxDrawer
 {
-    internal bool Generated { get; init; }
-    public int ViewerCount { get; set; }
-    public required string Username { get; init; }
+    /// <summary>
+    ///     Draws a checkbox.
+    /// </summary>
+    /// <param name="region">The region to draw the checkbox in</param>
+    /// <param name="state">The current state of the checkbox</param>
+    /// <returns>Whether or not the checkbox was clicked</returns>
+    public static bool DrawCheckbox(Rect region, ref bool state)
+    {
+        bool proxy = state;
+        Widgets.Checkbox(region.position, ref proxy, Mathf.Min(region.width, region.height), paintable: true);
+
+        bool changed = proxy != state;
+        state = proxy;
+
+        return changed;
+    }
 }

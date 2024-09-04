@@ -1,0 +1,93 @@
+﻿<Project>
+    <!-- Language Metadata -->
+    <PropertyGroup>
+        <Nullable>enable</Nullable>
+        <OutputType>Library</OutputType>
+        <LangVersion>latest</LangVersion>
+        <TargetFramework>net48</TargetFramework>
+    </PropertyGroup>
+
+    <!-- Assembly Metadata -->
+    <PropertyGroup>
+        <Authors>SirRandoo</Authors>
+        <Product>ToolkitUtils</Product>
+        <RepositoryType>git</RepositoryType>
+        <InformationalVersion>1.1.0</InformationalVersion>
+        <RootNamespace>SirRandoo.$(MsBuildProjectName)</RootNamespace>
+        <RepositoryUrl>https://github.com/sirrandoo/toolkit-utils</RepositoryUrl>
+        <Copyright>AGPL3 Copyright (c) $([System.DateTime]::Now.ToString("yyyy")) SirRandoo</Copyright>
+    </PropertyGroup>
+
+    <!-- Build Metadata -->
+    <PropertyGroup>
+        <RimWorldVersion>1.5</RimWorldVersion>
+        <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+        <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    </PropertyGroup>
+
+    <!-- Steam Paths -->
+    <PropertyGroup>
+        <MainWorkshopRoot>C:\Program Files (x86)\Steam\steamapps\workshop\content\294100</MainWorkshopRoot>
+        <AltWorkshopRoot>D:\SteamLibrary\steamapps\workshop\content\294100</AltWorkshopRoot>
+
+        <RimWorldWorkshopRoot Condition="Exists('$(MainWorkshopRoot)')">$(MainWorkshopRoot)</RimWorldWorkshopRoot>
+        <RimWorldWorkshopRoot Condition="Exists('$(AltWorkshopRoot)')">$(AltWorkshopRoot)</RimWorldWorkshopRoot>
+    </PropertyGroup>
+
+    <Choose>
+        <When Condition="$([MSBuild]::VersionLessThan('$(RimWorldVersion)', '1.4'))">
+            <PropertyGroup>
+                <ToolkitCoreId>2018368654</ToolkitCoreId>
+                <TwitchToolkitId>1718525787</TwitchToolkitId>
+            </PropertyGroup>
+        </When>
+        <Otherwise>
+            <PropertyGroup>
+                <ToolkitCoreId>3013877477</ToolkitCoreId>
+                <TwitchToolkitId>3013874066</TwitchToolkitId>
+            </PropertyGroup>
+        </Otherwise>
+    </Choose>
+
+    <!-- Local dependencies -->
+    <ItemGroup>
+        <Reference Include="TwitchToolkit">
+            <HintPath>$(RimWorldWorkshopRoot)\$(TwitchToolkitId)\v$(RimWorldVersion)\Assemblies\TwitchToolkit.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="ToolkitCore">
+            <HintPath>$(RimWorldWorkshopRoot)\$(ToolkitCoreId)\v$(RimWorldVersion)\Assemblies\ToolkitCore.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="Newtonsoft.Json">
+            <HintPath>$(RimWorldWorkshopRoot)\$(ToolkitCoreId)\Assemblies\Newtonsoft.Json.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="TwitchLib.Client">
+            <HintPath>$(RimWorldWorkshopRoot)\$(ToolkitCoreId)\Assemblies\TwitchLib.Client.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="TwitchLib.Client.Enums">
+            <HintPath>$(RimWorldWorkshopRoot)\$(ToolkitCoreId)\Assemblies\TwitchLib.Client.Enums.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="TwitchLib.Client.Models">
+            <HintPath>$(RimWorldWorkshopRoot)\$(ToolkitCoreId)\Assemblies\TwitchLib.Client.Models.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="TwitchLib.Communication">
+            <HintPath>$(RimWorldWorkshopRoot)\$(ToolkitCoreId)\Assemblies\TwitchLib.Communication.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+    </ItemGroup>
+
+    <!-- NuGet dependencies -->
+    <ItemGroup>
+        <PackageReference Include="PolySharp" Version="1.14.1" />
+        <PackageReference Include="Lib.Harmony" Version="2.3.3" ExcludeAssets="runtime" />
+        <PackageReference Include="Krafs.Rimworld.Ref" Version="$(RimWorldVersion).*" ExcludeAssets="runtime" />
+    </ItemGroup>
+</Project>

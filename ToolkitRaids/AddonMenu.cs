@@ -5,74 +5,65 @@ using ToolkitCore.Interfaces;
 using ToolkitCore.Windows;
 using Verse;
 
-namespace SirRandoo.ToolkitRaids
+namespace SirRandoo.ToolkitRaids;
+
+[UsedImplicitly]
+internal class AddonMenu : IAddonMenu
 {
-    public class AddonMenu : IAddonMenu
+    private static readonly List<FloatMenuOption> Options =
+    [
+        new FloatMenuOption("ToolkitRaids.AddonMenu.Settings".TranslateSimple(), OpenSettingsWindow),
+        new FloatMenuOption("ToolkitRaids.AddonMenu.ForceNoRegister".TranslateSimple(), CloseRegistration),
+        new FloatMenuOption("ToolkitRaids.AddonMenu.ForceNewRaid".TranslateSimple(), ForceNewRaid),
+        new FloatMenuOption("ToolkitRaids.AddonMenu.ForceNewRaidLarge".TranslateSimple(), ForceNewLargeRaid),
+        new FloatMenuOption("ToolkitRaids.AddonMenu.ExecuteLastRaid".TranslateSimple(), ReplayLastRaid)
+    ];
+
+    public List<FloatMenuOption> MenuOptions() => Options;
+
+    private static void ReplayLastRaid()
     {
-        [NotNull]
-        public List<FloatMenuOption> MenuOptions()
+        RaidLogger.Info("Reviving last raid...");
+        Current.Game.GetComponent<GameComponentTwitchRaid>()?.RunLastRaid();
+    }
+
+    private static void ForceNewLargeRaid()
+    {
+        RaidLogger.Info("Forcibly starting a new large raid...");
+
+        var component = Current.Game.GetComponent<GameComponentTwitchRaid>();
+
+        if (component == null)
         {
-            return new List<FloatMenuOption>
-            {
-                new FloatMenuOption(
-                    "ToolkitRaids.AddonMenu.Settings".TranslateSimple(),
-                    () => Find.WindowStack.Add(new Window_ModSettings(LoadedModManager.GetMod<ToolkitRaids>()))
-                ),
-                new FloatMenuOption(
-                    "ToolkitRaids.AddonMenu.ForceNoRegister".TranslateSimple(),
-                    () =>
-                    {
-                        RaidLogger.Warn("Forcibly closing registration for all pending raids...");
-                        Current.Game?.GetComponent<GameComponentTwitchRaid>()?.ForceCloseRegistry();
-                    }
-                ),
-                new FloatMenuOption(
-                    "ToolkitRaids.AddonMenu.ForceNewRaid".TranslateSimple(),
-                    () =>
-                    {
-                        string result = ToolkitRaids.GenerateNameForRaid();
-
-                        ToolkitRaids.RecentRaids.Enqueue(
-                            new RaidLeader
-                            {
-                                Username = result, ViewerCount = Settings.MinimumRaiders + 1, Generated = true
-                            }
-                        );
-                        RaidLogger.Info($@"Scheduled a new raid with leader ""{result}"".");
-                    }
-                ),
-                new FloatMenuOption(
-                    "ToolkitRaids.AddonMenu.ForceNewRaidLarge".TranslateSimple(),
-                    () =>
-                    {
-                        RaidLogger.Info("Forcibly starting a new large raid...");
-
-                        var component = Current.Game.GetComponent<GameComponentTwitchRaid>();
-
-                        if (component == null)
-                        {
-                            return;
-                        }
-
-                        var raid = new Raid {Leader = ToolkitRaids.GenerateNameForRaid()};
-
-                        for (var index = 0; index < Rand.Range(20, 50); index++)
-                        {
-                            raid.Recruit(ToolkitRaids.GenerateNameForRaid());
-                        }
-
-                        component.RegisterRaid(raid);
-                    }
-                ),
-                new FloatMenuOption(
-                    "ToolkitRaids.AddonMenu.ExecuteLastRaid".TranslateSimple(),
-                    () =>
-                    {
-                        RaidLogger.Info("Reviving last raid...");
-                        Current.Game.GetComponent<GameComponentTwitchRaid>()?.RunLastRaid();
-                    }
-                )
-            };
+            return;
         }
+
+        var raid = new Raid { Leader = RaidMod.GenerateNameForRaid() };
+
+        for (var index = 0; index < Rand.Range(20, 50); index++)
+        {
+            raid.Recruit(RaidMod.GenerateNameForRaid());
+        }
+
+        component.RegisterRaid(raid);
+    }
+
+    private static void ForceNewRaid()
+    {
+        string result = RaidMod.GenerateNameForRaid();
+
+        RaidMod.RecentRaids.Enqueue(new RaidLeader { Username = result, ViewerCount = RaidMod.Instance.Settings.MinimumRaiders + 1, Generated = true });
+        RaidLogger.Info($"""Scheduled a new raid with leader "{result}".""");
+    }
+
+    private static void OpenSettingsWindow()
+    {
+        Find.WindowStack.Add(new Window_ModSettings(LoadedModManager.GetMod<RaidMod>()));
+    }
+
+    private static void CloseRegistration()
+    {
+        RaidLogger.Warn("Forcibly closing registration for all pending raids...");
+        Current.Game?.GetComponent<GameComponentTwitchRaid>()?.ForceCloseRegistry();
     }
 }

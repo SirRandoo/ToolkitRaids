@@ -1,6 +1,6 @@
 ﻿// MIT License
 //
-// Copyright (c) 2021 SirRandoo
+// Copyright (c) 2024 SirRandoo
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,11 +20,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-namespace SirRandoo.ToolkitRaids.Models;
+using UnityEngine;
+using Verse;
 
-public sealed class RaidLeader
+namespace SirRandoo.ToolkitRaids.UX;
+
+public static class LabelDrawer
 {
-    internal bool Generated { get; init; }
-    public int ViewerCount { get; set; }
-    public required string Username { get; init; }
+    public static void Draw(Rect region, string text, TextAnchor anchor = TextAnchor.MiddleLeft, GameFont font = GameFont.Small)
+    {
+        Draw(region, text, Color.white, anchor, font);
+    }
+
+    public static void Draw(Rect region, string text, Color textColor, TextAnchor anchor = TextAnchor.MiddleLeft, GameFont font = GameFont.Small)
+    {
+        TextAnchor previousAnchor = Text.Anchor;
+        GameFont previousFont = Text.Font;
+        Color previousColor = GUI.color;
+
+        Text.Anchor = anchor;
+        Text.Font = font;
+
+        GUI.color = textColor;
+        Widgets.Label(region, text);
+        GUI.color = previousColor;
+
+        Text.Anchor = previousAnchor;
+        Text.Font = previousFont;
+    }
 }

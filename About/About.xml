@@ -5,23 +5,42 @@
     <author>SirRandoo</author>
     <description>For when you actually want to fight off Twitch raids.</description>
     <packageId>sirrandoo.tkcore.raids</packageId>
-    
+
     <supportedVersions>
         <li>1.1</li>
         <li>1.2</li>
         <li>1.3</li>
         <li>1.4</li>
+        <li>1.5</li>
     </supportedVersions>
-    
+
     <modDependencies>
         <li>
-            <packageId>hodlhodl.toolkitcore</packageId>
+            <packageId>nry.toolkitcore</packageId>
             <displayName>ToolkitCore</displayName>
-            <steamWorkshopUrl>steam://url/CommunityFilePage/2018368654</steamWorkshopUrl>
+            <steamWorkshopUrl>steam://url/CommunityFilePage/3013874066</steamWorkshopUrl>
         </li>
     </modDependencies>
-    
+
+    <modDependenciesByVersion>
+        <v1.3>
+            <li>
+                <packageId>hodlhodl.toolkitcore</packageId>
+                <displayName>ToolkitCore</displayName>
+                <steamWorkshopUrl>steam://url/CommunityFilePage/1718525787</steamWorkshopUrl>
+            </li>
+        </v1.3>
+        <v1.2>
+            <li>
+                <packageId>hodlhodl.toolkitcore</packageId>
+                <displayName>ToolkitCore</displayName>
+                <steamWorkshopUrl>steam://url/CommunityFilePage/1718525787</steamWorkshopUrl>
+            </li>
+        </v1.2>
+    </modDependenciesByVersion>
+
     <loadAfter>
         <li>hodlhodl.toolkitcore</li>
+        <li>nry.toolkitcore</li>
     </loadAfter>
 </ModMetaData>

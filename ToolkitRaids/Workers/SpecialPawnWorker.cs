@@ -1,51 +1,51 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using JetBrains.Annotations;
 using SirRandoo.ToolkitRaids.Interfaces;
 using SirRandoo.ToolkitRaids.Workers.Effects;
 using Verse;
 
-namespace SirRandoo.ToolkitRaids.Workers
+namespace SirRandoo.ToolkitRaids.Workers;
+
+[UsedImplicitly]
+[StaticConstructorOnStartup]
+internal static class SpecialPawnWorker
 {
-    [UsedImplicitly]
-    [StaticConstructorOnStartup]
-    public static class SpecialPawnWorker
+    private static readonly Dictionary<string, IEffectWorker> SpecialEffects;
+
+    [SuppressMessage("ReSharper", "StringLiteralTypo")]
+    static SpecialPawnWorker()
     {
-        private static readonly Dictionary<string, IEffectWorker> SpecialEffects;
+        SpecialEffects = new Dictionary<string, IEffectWorker> { { "sirrandoo", new SirRandooEffectWorker() }, { "hodlhodl", new DefaultEffectWorker() } };
 
-        static SpecialPawnWorker()
+        RaidMod.SpecialNames = SpecialEffects.Keys.ToList();
+    }
+
+    private static bool IsSpecialPawn(string name) => RaidMod.SpecialNames.Contains(name.ToLowerInvariant());
+
+    public static void ApplyEffectOf(string name, Pawn pawn)
+    {
+        if (pawn.RaceProps.IsMechanoid || pawn.RaceProps.IsAnomalyEntity)
         {
-            SpecialEffects = new Dictionary<string, IEffectWorker>
-            {
-                {"sirrandoo", new SirRandooEffect()}, {"hodlhodl", new DefaultEffect()}
-            };
-
-            ToolkitRaids.SpecialNames = SpecialEffects.Keys.ToList();
+            return;
         }
 
-        private static bool IsSpecialPawn([NotNull] string name)
+        if (!IsSpecialPawn(name))
         {
-            return ToolkitRaids.SpecialNames.Contains(name.ToLowerInvariant());
+            return;
         }
 
-        public static void ApplyEffectOf([NotNull] string name, Pawn pawn)
+        if (!SpecialEffects.TryGetValue(name.ToLowerInvariant(), out IEffectWorker effectWorker))
         {
-            if (!IsSpecialPawn(name))
-            {
-                return;
-            }
-
-            if (!SpecialEffects.TryGetValue(name.ToLowerInvariant(), out IEffectWorker effectWorker))
-            {
-                return;
-            }
-
-            if (!Rand.Chance(effectWorker.Chance))
-            {
-                return;
-            }
-
-            effectWorker.Apply(pawn);
+            return;
         }
+
+        if (!Rand.Chance(effectWorker.Chance))
+        {
+            return;
+        }
+
+        effectWorker.Apply(pawn);
     }
 }

@@ -7,180 +7,202 @@ using ToolkitCore;
 using UnityEngine;
 using Verse;
 
-namespace SirRandoo.ToolkitRaids
+namespace SirRandoo.ToolkitRaids;
+
+[UsedImplicitly]
+public class GameComponentTwitchRaid : GameComponent
 {
-    [UsedImplicitly]
-    public class GameComponentTwitchRaid : GameComponent
+    private Raid? _lastRaid;
+    private float _marker;
+    private List<Raid> _raids = [];
+
+    public GameComponentTwitchRaid(Game game)
     {
-        private Raid _lastRaid;
-        private float _marker;
-        private List<Raid> _raids = new List<Raid>();
+    }
 
-        public GameComponentTwitchRaid(Game game) { }
-
-        [NotNull] public List<Raid> AllRaidsForReading => _raids.ToList();
-        [NotNull] public IEnumerable<Raid> AllActiveRaids => _raids.Where(r => r.Timer > 0);
-
-        public override void GameComponentUpdate()
+    internal IEnumerable<Raid> GetActiveRaids()
+    {
+        for (var i = 0; i < _raids.Count; i++)
         {
-            ProcessRaidQueue();
-            ProcessViewerQueue();
+            Raid raid = _raids[i];
 
-            if (AllActiveRaids.Any() && !Find.WindowStack.IsOpen(typeof(RaidDialog)))
+            if (raid.Timer <= 0)
             {
-                Find.WindowStack.Add(new RaidDialog());
+                yield return raid;
             }
+        }
+    }
 
-            if (_marker <= 0)
-            {
-                _marker = Time.unscaledTime;
-            }
+    public override void GameComponentUpdate()
+    {
+        ProcessRaidQueue();
+        ProcessViewerQueue();
 
-            foreach (Raid raid in _raids)
-            {
-                raid.Timer -= Time.unscaledTime - _marker;
+        if (GetActiveRaids().Any() && !Find.WindowStack.IsOpen(typeof(RaidDialog)))
+        {
+            Find.WindowStack.Add(new RaidDialog());
+        }
 
-                if (raid.Timer > 0)
-                {
-                    continue;
-                }
-
-                try
-                {
-                    _lastRaid = raid;
-                    raid.Spawn();
-                }
-                catch (Exception e)
-                {
-                    RaidLogger.Error("Could not spawn raid", e);
-                }
-            }
-
+        if (_marker <= 0)
+        {
             _marker = Time.unscaledTime;
-            _raids.RemoveAll(r => r.Timer <= 0);
         }
 
-        private void ProcessViewerQueue()
+        foreach (Raid raid in _raids)
         {
-            while (!ToolkitRaids.ViewerQueue.IsEmpty)
-            {
-                if (!ToolkitRaids.ViewerQueue.TryDequeue(out string result) || result.NullOrEmpty())
-                {
-                    break;
-                }
+            raid.Timer -= Time.unscaledTime - _marker;
 
-                RecruitViewer(result);
+            if (raid.Timer > 0)
+            {
+                continue;
+            }
+
+            try
+            {
+                _lastRaid = raid;
+                raid.Spawn();
+            }
+            catch (Exception e)
+            {
+                RaidLogger.Error("Could not spawn raid", e);
             }
         }
 
-        private void ProcessRaidQueue()
+        _marker = Time.unscaledTime;
+        _raids.RemoveAll(static r => r.Timer <= 0);
+    }
+
+    private void ProcessViewerQueue()
+    {
+        if (RaidMod.ViewerQueue.IsEmpty || !RaidMod.ViewerQueue.TryDequeue(out string viewer) || string.IsNullOrEmpty(viewer))
         {
-            while (!ToolkitRaids.RecentRaids.IsEmpty)
-            {
-                if (!ToolkitRaids.RecentRaids.TryDequeue(out RaidLeader result))
-                {
-                    break;
-                }
-
-                if (result.ViewerCount < Settings.MinimumRaiders && !result.Generated)
-                {
-                    continue;
-                }
-
-                ProcessRaid(result);
-            }
+            return;
         }
 
-        private void RecruitViewer(string viewer)
+        RecruitViewer(viewer);
+    }
+
+    private void ProcessRaidQueue()
+    {
+        if (RaidMod.RecentRaids.IsEmpty || !RaidMod.RecentRaids.TryDequeue(out RaidLeader leader))
         {
-            if (!CanJoinRaid(viewer))
-            {
-                return;
-            }
-
-            var chance = 1f;
-            foreach (Raid raid in _raids.Where(
-                r => r.Timer > 0 && !r.Leader.EqualsIgnoreCase(viewer) && !r.Army.Contains(viewer)
-            ))
-            {
-                if (!Rand.Chance(chance))
-                {
-                    continue;
-                }
-
-                raid.Recruit(viewer);
-                chance -= Mathf.Clamp(Rand.Range(0.05f, 0.5f), 0f, 1f);
-            }
+            return;
         }
 
-        private void ProcessRaid(RaidLeader result)
+        if (leader.ViewerCount < RaidMod.Instance.Settings.MinimumRaiders && !leader.Generated)
         {
-            if (Settings.MergeRaids)
-            {
-                Raid existing = _raids.FirstOrDefault();
+            return;
+        }
 
-                if (existing == null)
-                {
-                    _raids.Add(new Raid {Leader = result.Username, Timer = Settings.Duration});
-                }
-                else
-                {
-                    existing.Army.Add(result.Username);
-                }
+        ProcessRaid(leader);
+    }
+
+    private void RecruitViewer(string viewer)
+    {
+        if (!CanJoinRaid(viewer))
+        {
+            return;
+        }
+
+        var chance = 1f;
+
+        for (var i = 0; i < _raids.Count; i++)
+        {
+            if (!Rand.Chance(chance))
+            {
+                continue;
+            }
+
+            Raid raid = _raids[i];
+
+            if (raid.Timer <= 0 || string.Equals(raid.Leader, viewer, StringComparison.OrdinalIgnoreCase) || raid.Army.Contains(viewer))
+            {
+                continue;
+            }
+
+            raid.Recruit(viewer);
+            chance -= Mathf.Clamp(Rand.Range(0.05f, 0.5f), 0f, 1f);
+        }
+    }
+
+    private void ProcessRaid(RaidLeader result)
+    {
+        if (RaidMod.Instance.Settings.MergeRaids)
+        {
+            Raid? existing = _raids.FirstOrDefault();
+
+            if (existing == null)
+            {
+                _raids.Add(new Raid { Leader = result.Username, Timer = RaidMod.Instance.Settings.Duration });
             }
             else
             {
-                if (_raids.Any(l => l.Leader.Equals(result.Username)))
-                {
-                    RaidLogger.Warn("Received a duplicate raid.");
-                    return;
-                }
-
-                _raids.Add(new Raid {Leader = result.Username, Timer = Settings.Duration});
-            }
-
-            if (Settings.SendMessage && !Settings.MessageToSend.NullOrEmpty() && !result.Generated)
-            {
-                TwitchWrapper.SendChatMessage(
-                    Settings.MessageToSend.Replace("%raider%", result.Username)
-                       .Replace("%viewers%", result.ViewerCount.ToString("N0"))
-                );
+                existing.Recruit(result.Username);
             }
         }
-
-        public void ForceCloseRegistry()
+        else
         {
-            foreach (Raid raid in _raids)
+            if (_raids.Any(l => l.Leader.Equals(result.Username)))
             {
-                raid.Timer = -10f;
-            }
-        }
+                RaidLogger.Warn("Received a duplicate raid.");
 
-        public bool CanJoinRaid(string viewer)
-        {
-            return _raids.Where(r => r.Timer > 0f)
-               .Any(r => !r.Leader.EqualsIgnoreCase(viewer) && !r.Army.Contains(viewer.ToLowerInvariant()));
-        }
-
-        public void RegisterRaid(Raid raid)
-        {
-            _raids.Add(raid);
-        }
-
-        public void RunLastRaid()
-        {
-            if (_lastRaid == null)
-            {
                 return;
             }
 
-            RegisterRaid(_lastRaid);
+            _raids.Add(new Raid { Leader = result.Username, Timer = RaidMod.Instance.Settings.Duration });
         }
 
-        public override void ExposeData()
+        if (RaidMod.Instance.Settings.SendMessage && !RaidMod.Instance.Settings.MessageToSend.NullOrEmpty() && !result.Generated)
         {
-            Scribe_Deep.Look(ref _lastRaid, "lastRaid");
-            Scribe_Collections.Look(ref _raids, "pendingRaids", LookMode.Deep);
+            TwitchWrapper.SendChatMessage(
+                RaidMod.Instance.Settings.MessageToSend.Replace("%raider%", result.Username).Replace("%viewers%", result.ViewerCount.ToString("N0"))
+            );
         }
+    }
+
+    internal void ForceCloseRegistry()
+    {
+        foreach (Raid raid in _raids)
+        {
+            raid.Timer = -10f;
+        }
+    }
+
+    private bool CanJoinRaid(string viewer)
+    {
+        for (var i = 0; i < _raids.Count; i++)
+        {
+            Raid raid = _raids[i];
+
+            if (raid.Timer <= 0 || string.Equals(raid.Leader, viewer, StringComparison.OrdinalIgnoreCase) || raid.Army.Contains(viewer))
+            {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    internal void RegisterRaid(Raid raid)
+    {
+        _raids.Add(raid);
+    }
+
+    internal void RunLastRaid()
+    {
+        if (_lastRaid == null)
+        {
+            return;
+        }
+
+        RegisterRaid(_lastRaid);
+    }
+
+    public override void ExposeData()
+    {
+        Scribe_Deep.Look(ref _lastRaid, "lastRaid");
+        Scribe_Collections.Look(ref _raids, "pendingRaids", LookMode.Deep);
     }
 }
