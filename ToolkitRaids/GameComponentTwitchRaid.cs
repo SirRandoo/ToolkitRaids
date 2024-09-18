@@ -26,7 +26,7 @@ public class GameComponentTwitchRaid : GameComponent
         {
             Raid raid = _raids[i];
 
-            if (raid.Timer <= 0)
+            if (raid.Timer > 0)
             {
                 yield return raid;
             }

@@ -7,7 +7,8 @@
     <ToolkitRaids.AddonMenu.ForceNewRaid>Generate new raid</ToolkitRaids.AddonMenu.ForceNewRaid>
     <ToolkitRaids.AddonMenu.ForceNewRaidLarge>Generate new large raid</ToolkitRaids.AddonMenu.ForceNewRaidLarge>
     <ToolkitRaids.AddonMenu.ExecuteLastRaid>Revive last raid</ToolkitRaids.AddonMenu.ExecuteLastRaid>
-    
+    <ToolkitRaids.AddonMenu.QueueDebugRaid>Queue debug raid</ToolkitRaids.AddonMenu.QueueDebugRaid>
+
     <!-- Settings -->
     <ToolkitRaids.MergeRaids.Label>Merge Twitch raids into one.</ToolkitRaids.MergeRaids.Label>
     <ToolkitRaids.MergeRaids.Description>When enabled, the mod will merge all raids into one singular one. This singular raid will be the oldest active raid that's accepting viewers via !joinraid.</ToolkitRaids.MergeRaids.Description>
@@ -34,7 +35,7 @@
     <ToolkitRaids.Letters.Strategy.Sapper>They've arrived with plans to breach your settlement's walls.</ToolkitRaids.Letters.Strategy.Sapper>
     <ToolkitRaids.Letters.Strategy.Unknown>Their attack plan could not be deciphered.</ToolkitRaids.Letters.Strategy.Unknown>
     <ToolkitRaids.Letters.FailedSubtext>{0} viewers were lost along the way.</ToolkitRaids.Letters.FailedSubtext>
-    
+
     <!-- Window -->
     <ToolkitRaids.Windows.Raid.Title>An army has amassed</ToolkitRaids.Windows.Raid.Title>
     <ToolkitRaids.Windows.Raid.Footer>Type !joinraid to join the raid.</ToolkitRaids.Windows.Raid.Footer>
