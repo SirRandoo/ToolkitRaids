@@ -6,14 +6,14 @@ namespace SirRandoo.ToolkitRaids;
 [PublicAPI]
 public sealed class Settings : ModSettings
 {
-    private int _duration;
-    private float _maximumAllowedPoints;
+    private int _duration = 120;
+    private float _maximumAllowedPoints = 2000f;
     private bool _mergeRaids;
-    private string _messageToSend = null!;
-    private int _minimumRaiders;
-    private float _pointsPerPerson;
+    private string _messageToSend = "!so %raider%";
+    private int _minimumRaiders = 2;
+    private float _pointsPerPerson = 20f;
     private bool _sendMessage;
-    private bool _useStoryteller;
+    private bool _useStoryteller = true;
 
     public float PointsPerPerson
     {
