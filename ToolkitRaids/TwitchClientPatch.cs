@@ -31,6 +31,7 @@ using TwitchLib.Client.Events;
 
 namespace SirRandoo.ToolkitRaids;
 
+[HarmonyPatch]
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 internal static class TwitchClientPatch
 {
