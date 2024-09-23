@@ -8,6 +8,7 @@
     <ToolkitRaids.AddonMenu.ForceNewRaidLarge>Generate new large raid</ToolkitRaids.AddonMenu.ForceNewRaidLarge>
     <ToolkitRaids.AddonMenu.ExecuteLastRaid>Revive last raid</ToolkitRaids.AddonMenu.ExecuteLastRaid>
     <ToolkitRaids.AddonMenu.QueueDebugRaid>Queue debug raid</ToolkitRaids.AddonMenu.QueueDebugRaid>
+    <ToolkitRaids.AddonMenu.BuildRaid>Build raid</ToolkitRaids.AddonMenu.BuildRaid>
 
     <!-- Settings -->
     <ToolkitRaids.MergeRaids.Label>Merge Twitch raids into one.</ToolkitRaids.MergeRaids.Label>
@@ -41,4 +42,11 @@
     <ToolkitRaids.Windows.Raid.Footer>Type !joinraid to join the raid.</ToolkitRaids.Windows.Raid.Footer>
     <ToolkitRaids.Windows.Raid.Leader>Raid leader</ToolkitRaids.Windows.Raid.Leader>
     <ToolkitRaids.Windows.Raid.Troops>Troops</ToolkitRaids.Windows.Raid.Troops>
+
+    <ToolkitRaids.Windows.Dialog.Submit>Submit</ToolkitRaids.Windows.Dialog.Submit>
+    <ToolkitRaids.Windows.Dialog.Cancel>Cancel</ToolkitRaids.Windows.Dialog.Cancel>
+    <ToolkitRaids.Windows.Builder.Raiders>Raiders</ToolkitRaids.Windows.Builder.Raiders>
+    <ToolkitRaids.Windows.Builder.AddRaider>Add raider</ToolkitRaids.Windows.Builder.AddRaider>
+    <ToolkitRaids.Windows.Builder.RaidLeader>Raid leader</ToolkitRaids.Windows.Builder.RaidLeader>
+    <ToolkitRaids.Windows.Builder.Generate>Generate</ToolkitRaids.Windows.Builder.Generate>
 </LanguageData>

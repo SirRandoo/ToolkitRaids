@@ -18,8 +18,14 @@ internal class AddonMenu : IAddonMenu
         new FloatMenuOption("ToolkitRaids.AddonMenu.ForceNewRaid".TranslateSimple(), ForceNewRaid),
         new FloatMenuOption("ToolkitRaids.AddonMenu.ForceNewRaidLarge".TranslateSimple(), ForceNewLargeRaid),
         new FloatMenuOption("ToolkitRaids.AddonMenu.ExecuteLastRaid".TranslateSimple(), ReplayLastRaid),
-        new FloatMenuOption("ToolkitRaids.AddonMenu.QueueDebugRaid".TranslateSimple(), QueueDebugRaid)
+        new FloatMenuOption("ToolkitRaids.AddonMenu.QueueDebugRaid".TranslateSimple(), QueueDebugRaid),
+        new FloatMenuOption("ToolkitRaids.AddonMenu.BuildRaid".TranslateSimple(), BuildRaid)
     ];
+
+    private static void BuildRaid()
+    {
+        Find.WindowStack.Add(new RaidBuilderWindow());
+    }
 
     public List<FloatMenuOption> MenuOptions() => Options;
 
