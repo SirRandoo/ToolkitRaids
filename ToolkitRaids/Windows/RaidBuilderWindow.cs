@@ -22,7 +22,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using JetBrains.Annotations;
 using SirRandoo.ToolkitRaids.Models;
 using SirRandoo.ToolkitRaids.UX;
@@ -33,22 +32,25 @@ namespace SirRandoo.ToolkitRaids.Windows;
 
 internal sealed class RaidBuilderWindow : Window
 {
-    private string _raidLeader = RaidMod.GenerateNameForRaid();
     private readonly List<string> _raiders = [];
+    private string _raidLeader = RaidMod.GenerateNameForRaid();
     private Vector2 _scrollPosition = Vector2.zero;
+    private bool _shouldGenerateRaid;
 
     /// <inheritdoc />
-    public override Vector2 InitialSize => new Vector2(250, 300);
+    public override Vector2 InitialSize => new(250, 300);
 
     /// <inheritdoc />
     public override void DoWindowContents(Rect inRect)
     {
         var listing = new Listing_Standard();
         var leaderRegion = new Rect(0f, 0f, inRect.width, Text.SmallFontHeight);
-        var generateRegion = new Rect(0f, inRect.height - Text.SmallFontHeight, inRect.width, Text.SmallFontHeight);
+        var buttonRegion = new Rect(0f, inRect.height - Text.SmallFontHeight, inRect.width, Text.SmallFontHeight);
         var raidersRegion = new Rect(0f, leaderRegion.height + Text.SmallFontHeight * 2, inRect.width, inRect.height - leaderRegion.height - Text.SmallFontHeight * 3);
         var raidersListRegion = new Rect(0f, Text.SmallFontHeight, inRect.width, raidersRegion.height - Text.SmallFontHeight * 2);
         var raidersScrollView = new Rect(0f, 0f, raidersListRegion.width - 16f, Text.SmallFontHeight * _raiders.Count);
+        Rect generateRegion = buttonRegion.LeftHalf();
+        Rect cancelRegion = buttonRegion.RightHalf();
 
         listing.Begin(leaderRegion);
 
@@ -121,6 +123,13 @@ internal sealed class RaidBuilderWindow : Window
 
         if (Widgets.ButtonText(generateRegion, "ToolkitRaids.Windows.Builder.Generate".TranslateSimple()))
         {
+            _shouldGenerateRaid = true;
+
+            Close();
+        }
+
+        if (Widgets.ButtonText(cancelRegion, "Cancel".TranslateSimple()))
+        {
             Close();
         }
     }
@@ -128,6 +137,11 @@ internal sealed class RaidBuilderWindow : Window
     /// <inheritdoc />
     public override void PostClose()
     {
+        if (!_shouldGenerateRaid)
+        {
+            return;
+        }
+
         var component = Current.Game.GetComponent<GameComponentTwitchRaid>();
 
         if (component == null)
@@ -145,11 +159,11 @@ internal sealed class RaidBuilderWindow : Window
     {
         private string _name = string.Empty;
 
+        /// <inheritdoc />
+        public override Vector2 InitialSize => new(200, 80);
+
         public event EventHandler<string> Submitted = null!;
         public event EventHandler Cancelled = null!;
-
-        /// <inheritdoc />
-        public override Vector2 InitialSize => new Vector2(200, 80);
 
         /// <inheritdoc />
         public override void DoWindowContents(Rect inRect)
@@ -189,6 +203,7 @@ internal sealed class RaidBuilderWindow : Window
 
         private void OnSubmitted(string e)
         {
+            // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
             Submitted?.Invoke(this, e);
 
             Close();
@@ -196,6 +211,7 @@ internal sealed class RaidBuilderWindow : Window
 
         private void OnCancelled()
         {
+            // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
             Cancelled?.Invoke(this, EventArgs.Empty);
 
             Close();

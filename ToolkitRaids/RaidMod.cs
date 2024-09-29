@@ -2,8 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using System.Threading;
 using HarmonyLib;
 using JetBrains.Annotations;
 using SirRandoo.ToolkitRaids.Models;
@@ -18,17 +16,15 @@ namespace SirRandoo.ToolkitRaids;
 public class RaidMod : Mod
 {
     internal static List<string> SpecialNames = null!;
-    private DateTime _settingsWindowCooldown;
 
     internal static readonly ConcurrentQueue<RaidLeader> RecentRaids = new();
     internal static readonly ConcurrentQueue<string> ViewerQueue = new();
+    private DateTime _settingsWindowCooldown;
 
     public RaidMod(ModContentPack content) : base(content)
     {
         Instance = this;
         Settings = GetSettings<Settings>();
-
-        new Harmony("com.sirrandoo.tkraids").PatchAll(Assembly.GetExecutingAssembly());
     }
 
     internal Settings Settings { get; }
@@ -52,4 +48,16 @@ public class RaidMod : Mod
     internal static string GenerateNameForRaid() => UnityData.IsInMainThread && Rand.Chance(0.05f)
         ? SpecialNames.RandomElement()
         : Path.GetRandomFileName().Replace(".", "")[..8];
+}
+
+[UsedImplicitly]
+[StaticConstructorOnStartup]
+internal static class PatchRunner
+{
+    private static readonly Harmony Harmony = new("com.sirrandoo.tkraids");
+
+    static PatchRunner()
+    {
+        Harmony.PatchAll();
+    }
 }

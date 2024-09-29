@@ -12,7 +12,7 @@
         <Authors>SirRandoo</Authors>
         <Product>ToolkitUtils</Product>
         <RepositoryType>git</RepositoryType>
-        <InformationalVersion>1.2.0</InformationalVersion>
+        <InformationalVersion>1.2.1</InformationalVersion>
         <RootNamespace>SirRandoo.$(MsBuildProjectName)</RootNamespace>
         <RepositoryUrl>https://github.com/sirrandoo/toolkit-utils</RepositoryUrl>
         <Copyright>AGPL3 Copyright (c) $([System.DateTime]::Now.ToString("yyyy")) SirRandoo</Copyright>

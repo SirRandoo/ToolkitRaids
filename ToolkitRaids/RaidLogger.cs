@@ -1,6 +1,10 @@
 ﻿using System;
 using Verse;
 
+#if DEBUG
+using UnityEngine;
+#endif
+
 namespace SirRandoo.ToolkitRaids;
 
 internal static class RaidLogger

@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using SirRandoo.ToolkitRaids.Models;
 using SirRandoo.ToolkitRaids.Windows;
+using ToolkitCore;
 using ToolkitCore.Interfaces;
 using ToolkitCore.Windows;
+using TwitchLib.Client.Enums;
+using TwitchLib.Client.Extensions;
 using Verse;
 
 namespace SirRandoo.ToolkitRaids;
@@ -79,8 +83,28 @@ internal class AddonMenu : IAddonMenu
     {
         RaidLogger.Info("Queued debug raid...");
 
-        RaidMod.RecentRaids.Enqueue(
-            new RaidLeader { Username = RaidMod.GenerateNameForRaid(), ViewerCount = Rand.Range(RaidMod.Instance.Settings.MinimumRaiders + 1, 80), Generated = true }
+        TwitchWrapper.Client.InvokeRaidNotification(
+            ToolkitCoreSettings.channel_username,
+            [],
+            [],
+            "#FFFFFF",
+            ToolkitCoreSettings.bot_username,
+            "",
+            Guid.NewGuid().ToString(),
+            ToolkitCoreSettings.bot_username,
+            true,
+            Guid.NewGuid().ToString(),
+            ToolkitCoreSettings.bot_username,
+            ToolkitCoreSettings.bot_username,
+            RaidMod.Instance.Settings.MinimumRaiders.ToString(),
+            Guid.NewGuid().ToString(),
+            false,
+            "",
+            "",
+            "",
+            false,
+            UserType.Moderator,
+            Guid.NewGuid().ToString()
         );
     }
 }

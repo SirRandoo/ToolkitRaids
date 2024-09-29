@@ -20,48 +20,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#if DEBUG
+
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using HarmonyLib;
-using JetBrains.Annotations;
-using SirRandoo.ToolkitRaids.Models;
 using ToolkitCore;
 using TwitchLib.Client;
-using TwitchLib.Client.Events;
 
-namespace SirRandoo.ToolkitRaids;
+namespace SirRandoo.ToolkitRaids.Patches;
 
 [HarmonyPatch]
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-internal static class TwitchClientPatch
+internal static class ProbePatches
 {
     private static IEnumerable<MethodBase> TargetMethods()
     {
         yield return AccessTools.Method(typeof(TwitchWrapper), "InitializeClient");
+        yield return AccessTools.Method(typeof(TwitchWrapper), "OnRaidNotification");
+        yield return AccessTools.Method(typeof(TwitchClient), "HandleIrcMessage");
+        yield return AccessTools.Method(typeof(TwitchClient), "HandleUserNotice");
     }
 
-    private static void Postfix()
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
+    private static void Postfix(MethodBase __originalMethod)
     {
-        TwitchClient? client = TwitchWrapper.Client;
-
-        if (client != null)
-        {
-            client.OnRaidNotification += OnRaidNotification;
-        }
-    }
-
-    private static void OnRaidNotification(object sender, OnRaidNotificationArgs args)
-    {
-        var leader = new RaidLeader { Username = args.RaidNotification.Login };
-
-        if (!int.TryParse(args.RaidNotification.MsgParamViewerCount, out int count))
-        {
-            RaidLogger.Warn($"Could not parse viewer count of {args.RaidNotification.MsgParamViewerCount}. Defaulted to 1");
-            count = 1;
-        }
-
-        leader.ViewerCount = count;
-
-        RaidMod.RecentRaids.Enqueue(leader);
+        RaidLogger.Debug($"[ProbePatches] Called {__originalMethod.FullDescription()}");
     }
 }
+
+#endif
